@@ -1,0 +1,11 @@
+Login:
+    Admin, User, Store Manager
+
+CRUD:
+    Store Manager
+        Read: 1. Get store manager by id, get_all managers
+
+    User
+         Read: 1. Get store manager by id, get_all managers
+
+
