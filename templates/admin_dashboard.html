@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+<style>
+        body {
+            background-color: rgb(187,214,251); /* Red background */
+        }
+    </style>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <center><h1>Admin dashboard</h1></center>    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Category Operations
+          </a>
+          <ul class="dropdown-menu">
+                {% for item in ['Create_Category', 'Delete_Category', 'Edit_Category'] %}
+                    <li><a class="dropdown-item" href="/admin_dashboard/{{item}}">{{ item }}</a></li>
+                {% endfor %}
+              </ul>
+        </li>
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Product Operations
+          </a>
+          <ul class="dropdown-menu">
+                {% for item in ['Create_Product', 'Delete_Product', 'Edit_Product'] %}
+                    <li><a class="dropdown-item" href="/admin_dashboard/{{item}}">{{ item }}</a></li>
+                {% endfor %}
+              </ul>
+        </li>
+      <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/summary">Summary</a>
+        </li>
+          <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{% if msg %}
+        <div class="alert alert-success" role="alert">
+                {{ msg }}
+        </div>
+    {% endif %}
+    {% if error %}
+        <div class="alert alert-danger mb-3" role="alert">
+                {{ error }}
+        </div>
+    {% endif %}
+<div class="container mt-5">
+        <h1 class="mb-4">Category List</h1>
+        <ul class="list-group">
+            {% for category in category_items %}
+            <li class="list-group-item">{{ category.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+<div class="container mt-5">
+        <h1 class="mb-4">Product List</h1>
+        <div class="row">
+            {% for product in product_items %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">
+                            Category: {% for category in category_items %}
+                                {% if category.id == product.category_id %}
+                                    {{ category.name }}
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
+                        <p class="card-text">Quantity: {{ product.quantity }}</p>
+                        <p class="card-text">Manufacture Date: {{ product.manufacture_date }}</p>
+                        <p class="card-text">Expiry Date: {{ product.expiry_date }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <br>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+</body>
+</html>

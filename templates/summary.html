@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordered Items</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<center><h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+        </svg>Welcome to Summary Page of MrBean Groceries</h3></center>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <!-- Home Link on the Left -->
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/admin_dashboard">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+  <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146ZM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5Z"/>
+</svg>Home
+          </a>
+
+      </ul>
+    </div>
+
+  </div>
+</nav>
+<div class="container mt-5">
+    <h1>Items Purchased: </h1>
+
+
+   {% if items %}
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    {% for user in user_items %}
+                        <div class="col-md-4">
+                            <h5>User: {{ user.fname }} {{ user.lname }}</h5>
+                            <h5>Email ID: {{ user.email }}</h5>
+                            <h5>Mobile Number: {{ user.mobile }}</h5><br><br>
+                            <h2>Ordered Items</h2>
+                            {% for product, profile in purchase_items %}
+                                {%  if user.id== profile.user_id %}
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
+                                <p class="card-text">Quantity: {{ profile.quantity }}</p>
+                                <p class="card-text">Purchase Date & Time: {{ profile.date_purchased }}</p>
+                                {%  endif %}
+                            {% endfor %}
+                        </div>
+                        {% if loop.index % 3 == 0 %}
+                            </div><hr><div class="row">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <br><h3>No items purchased</h3>
+{% endif %}
+
+</div>
+</body>
+</html>
