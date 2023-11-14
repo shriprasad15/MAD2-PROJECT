@@ -129,7 +129,7 @@ class CategoryCRUD(Resource):
         else:
             return "Error"
 
-class Product(Resource):
+class Product_API(Resource):
     @marshal_with(prod_fields)
     def get(self,cat_id):
         return prodCat(cat_id)
