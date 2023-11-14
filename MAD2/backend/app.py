@@ -1,7 +1,10 @@
 from flask import Flask,render_template,request,redirect,url_for,session
 from flask_restful import Resource, Api
+from config import Config
+from workers import *
 
 app = Flask(__name__, template_folder="templates")
+app.config.from_object(Config)
 from models import *
 from apis import *
 
@@ -19,5 +22,24 @@ api.add_resource(Cart, '/cart/<user_id>')
 api.add_resource(CartCRUD, '/cart/<id>/<userid>')
 
 api.add_resource(exports, "/export")
+
+api.add_resource(Celery_API, "/celery")
+def celery_func():
+    # cache.init_app(app)
+
+    celery1 = celery
+    celery1.conf.update(
+        broker_url=app.config["CELERY_BROKER_URL"],
+        result_backend=app.config["CELERY_RESULT_BACKEND"]
+    )
+    celery1.Task = ContextTask
+    # Setting Flask Security Setup
+    app.app_context().push()
+
+    return celery1
+
+
+celery = celery_func()
+print(celery)
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)

@@ -3,7 +3,8 @@ from sqlalchemy.orm import relationship,declarative_base, joinedload
 from datetime import datetime
 from datetime import date
 Base = declarative_base()
-from sqlalchemy import create_engine
+
+from sqlalchemy import create_engine, select, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 
@@ -96,7 +97,7 @@ session.execute(text("DELETE FROM carts"))
 session.execute(text("DELETE FROM products"))
 session.execute(text("DELETE FROM categories"))
 session.execute(text("DELETE FROM users"))
-session.execute(text("DELETE FROM profile"))
+# session.execute(text("DELETE FROM profile"))
 session.commit()
 
 session.add_all([ user2,user1, user3,category1, category2, product1, product2, product3, product4])
@@ -340,7 +341,20 @@ def Managersignin(email, password):
         return None
 
 def exportdetails():
-    result=session.query(Product, Profile).join(Profile).filter(Product.id == Profile.product_id, User.id==Profile.user_id).all()
-
+    result = session.query(
+        Product.name,
+        Product.quantity,
+        Product.rate_per_unit,
+        func.sum(Profile.quantity).label('total_quantity')
+    ).join(Profile, Product.id == Profile.product_id) \
+        .group_by(Product.id).all()
     return result
-
+def unit_sold(product_id):
+    result= session.query(Profile).filter(Profile.product_id==product_id).all()
+    s=0
+    print("gokul")
+    print(result)
+    for r in result:
+        s+=r.quantity
+    print(s)
+    return s

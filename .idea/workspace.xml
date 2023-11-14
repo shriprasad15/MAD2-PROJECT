@@ -5,11 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4bc1d3f-df1c-4ec8-b886-1f78304378a6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MAD2/steps.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/backend/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/backend/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/backend/task.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/backend/workers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/backend/apis.py" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/backend/apis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/backend/grocery.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/backend/grocery.db" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/backend/grocery.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/backend/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/backend/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grocery.db" beforeDir="false" afterPath="$PROJECT_DIR$/grocery.db" afterDir="false" />
     </list>
@@ -98,7 +102,7 @@
       <workItem from="1699700067354" duration="5850000" />
       <workItem from="1699768110457" duration="1203000" />
       <workItem from="1699862486923" duration="19860000" />
-      <workItem from="1699943066042" duration="7670000" />
+      <workItem from="1699943066042" duration="15916000" />
     </task>
     <servers />
   </component>
@@ -117,6 +121,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/MAD2_PROJECT$app.coverage" NAME="app Coverage Results" MODIFIED="1699955311072" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MAD2/backend" />
+    <SUITE FILE_PATH="coverage/MAD2_PROJECT$app.coverage" NAME="app Coverage Results" MODIFIED="1699963720877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MAD2/backend" />
   </component>
 </project>

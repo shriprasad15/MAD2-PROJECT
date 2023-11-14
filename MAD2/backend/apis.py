@@ -1,6 +1,8 @@
 from flask_restful import Resource, Api, marshal, reqparse, fields, marshal_with
 from models import *
 from flask import request
+import csv, os
+from task import send_welcome_msg
 
 class Homepage(Resource):
     def get(self):
@@ -204,21 +206,45 @@ class CartCRUD(Resource):
         deleteProductCart(userid, id)
         return "Deleted successfully"
 
-product_name_field = fields.String(attribute=lambda x: x.name)
-export_details={
-    "product_name": product_name_field,
-    "user_id":fields.Integer,
-    "product_id":fields.Integer,
-    "quantity":fields.Integer,
+# product_name_field = fields.String(attribute=lambda x: x.name)
+# export_details={
+#     "product_name": product_name_field,
+#     "user_id":fields.Integer,
+#     "product_id":fields.Integer,
+#     "quantity":fields.Integer,
+#     "date_purchased": fields.String
+# }
+export_details = {
+    "product_name": fields.String,
+    "user_id": fields.Integer,
+    "product_id": fields.Integer,
+    "quantity": fields.Integer,
     "date_purchased": fields.String
 }
-
 export_data= reqparse.RequestParser()
 # export_data.add_argument()
 class exports(Resource):
-    @marshal_with(export_details)
     def get(self):
-        result= exportdetails()
-        marshalled_result = [marshal(row, export_details) for row in result]
+    # remove csv file if already exists
+        for file in os.listdir('./instance'):
+            if file.endswith(".csv"):
+                os.remove(f'./instance/{file}')
+        with open(f'./instance/name.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Product Name", "stock_left","rate", "units sold"])
+            result=exportdetails()
+            print(result)
+            for row in result:
+                name, stock_left, rate_per_unit, total_quantity = row
+                print(
+                    f"Product Name: {name},Stock Left {stock_left}, Rate per Unit: {rate_per_unit}, Total Quantity: {total_quantity}")
 
-        return marshalled_result
+                writer.writerow(row)        # to send file to user as download
+        from flask import send_file
+        return send_file(f'./instance/name.csv', as_attachment=True)
+
+
+class Celery_API(Resource):
+    def get(self):
+        data = send_welcome_msg.delay("Hello Celery")
+        return "Task completed"
