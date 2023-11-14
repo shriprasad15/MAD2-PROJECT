@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey,or_
+from sqlalchemy import Column, Integer, String,Boolean, Date, ForeignKey,or_
 from sqlalchemy.orm import relationship,declarative_base, joinedload
 from datetime import datetime
 from datetime import date
@@ -18,7 +18,7 @@ class User(Base):
     email = Column(String, unique=True)
     password = Column(String)
     role = Column(String)
-
+    is_approved = Column(Boolean)
     carts = relationship("Cart")
     def __repr__(self):
         return '<User %r>' % self.fname
@@ -41,6 +41,7 @@ class Category(Base):
     name = Column(String, unique=True)
 
     products = relationship("Product")
+    is_approved= Column(Boolean)
     def __repr__(self):
         return '<Category %r>' % self.name
 
@@ -72,8 +73,9 @@ class Cart(Base):
 
 # Sample Data
 # user1 = User(name='John Doe', email='john@example.com', password='password', role='admin')
-user1 = User(fname='Teddy',lname='Bear', email='teddy@mrbean.com', password='ted', role='admin')
-user2 = User(fname='Ken',lname='Adams', email='ken@adams.com', mobile=1234,password='1234', role='user')
+user1 = User(fname='Teddy',lname='Bear', email='teddy@mrbean.com', password='ted', role='admin', is_approved=True)
+user2 = User(fname='Ken',lname='Adams', email='ken@adams.com', mobile=1234,password='1234', role='user',is_approved=True)
+user3= User(fname='Shri',lname='Prasad', email='shri@prasad.com', mobile=5678,password='1111', role='manager',is_approved=False)
 category1 = Category(name='Fruits')
 category2 = Category(name='Snacks')
 
@@ -97,7 +99,7 @@ session.execute(text("DELETE FROM users"))
 session.execute(text("DELETE FROM profile"))
 session.commit()
 
-session.add_all([ user2,user1,category1, category2, product1, product2, product3, product4])
+session.add_all([ user2,user1, user3,category1, category2, product1, product2, product3, product4])
 session.commit()
 
 
@@ -107,6 +109,7 @@ def signup(fname, lname,mobile, email, password):
     user1 = User(fname=fname, lname=lname,mobile=mobile, email=email, password=password, role='user')
     session.add(user1)
     session.commit()
+    return user1
 def validateSignup(email):
     u1 = session.query(User).filter(User.email == email).first()
     if u1:
@@ -121,6 +124,12 @@ def Usersignin(email, password):
 def fetch_user(userid):
     u1 = session.query(User).filter(User.id == userid).first()
     return u1
+def fetch_all_user(filters=None):
+    if not filters:
+        u1= session.query(User).all()
+    else:
+        u1= session.query(User).filter_by(**filters).all()
+    return u1
 
 def addcart(userid, product_id):
     product_exist=session.query(Cart).filter(Cart.user_id == userid,Cart.product_id==product_id ).first()
@@ -128,12 +137,12 @@ def addcart(userid, product_id):
         cart=Cart(user_id=userid, product_id=product_id, quantity=1)
         session.add(cart)
         session.commit()
-        return (session.query(Product).filter(Product.id==product_id).first()).name
+        return cart
     else:
         product_exist.quantity += 1
         cart = product_exist
         session.commit()
-        return (session.query(Product).filter(Product.id==product_id).first()).name
+        return cart
 
 
 def cartProducts(userid):
@@ -150,27 +159,36 @@ def Adminsignin(email, password):
     else:
         False
 
-def validateCategory(name):
+def validateCategory_name(name):
     u1 = session.query(Category).filter(Category.name == name).first()
     if u1:
         return False
     return True
+
+def validateCategory_id(id):
+    u1 = session.query(Category).filter(Category.id == id).first()
+    if u1:
+        return True
+    return False
 def AddCategory(name):
     category=Category(name=name)
     session.add(category)
     session.commit()
+    return category
 
-def DeleteCategory(name):
+def DeleteCategory(id):
 
-    category = session.query(Category).filter(Category.name == name).first()
+    category = session.query(Category).filter(Category.id == id).first()
     product= session.query(Product).filter(Product.category_id == category.id).all()
     if category:
+        name=category.name
         session.delete(category)
         for item in product:
             session.delete(item)
         session.commit()
         return f"Category '{name}' has been deleted successfully."
     else:
+        name = category.name
         return f"Category '{name}' not found."
 
 
@@ -194,9 +212,10 @@ def searchProduct(query):
 
     # return None
 
-def EditCategory(newName, oldName):
-    category = session.query(Category).filter(Category.name == oldName).first()
+def EditCategory(newName, id):
+    category = session.query(Category).filter(Category.id == id).first()
     if category:
+        oldName=category.name
         category.name=newName
         session.commit()
         return f"Category {oldName} has been changed to {newName}"
@@ -257,8 +276,8 @@ def buyAll(userid):
     return True
 
 
-def validateProduct(name, category_id):
-    u1 = session.query(Product).filter(Product.name == name and Product.id== category_id.id).first()
+def validateProduct(prod_id):
+    u1 = session.query(Product).filter(Product.id == prod_id).first()
     if u1:
         return False
     return True
@@ -268,18 +287,20 @@ def AddProduct(name, manufacture_date, expiry_date, rate_per_unit, category_id, 
     session.add(product)
     session.commit()
 
-def DeleteProduct(name):
+def DeleteProduct(id):
 
-    product = session.query(Product).filter(Product.name == name).first()
+    product = session.query(Product).filter(Product.id == id).first()
 
     if product:
+        name=product.name
         session.delete(product)
         session.commit()
         return f"Product '{name}' has been deleted successfully."
     else:
+        name=product.name
         return f"Product '{name}' not found."
-def ProductUpdate(old_product_name, new_product_name, manufacture_date, expiry_date, rate_per_unit, quantity):
-    existing_product = session.query(Product).filter_by(name=old_product_name).first()
+def ProductUpdate(prod_id, new_product_name, manufacture_date, expiry_date, rate_per_unit, quantity):
+    existing_product = session.query(Product).filter_by(id=prod_id).first()
 
     if existing_product:
         if new_product_name:
@@ -295,9 +316,9 @@ def ProductUpdate(old_product_name, new_product_name, manufacture_date, expiry_d
 
 
         session.commit()
-        return True
+        return f"Product has been deleted successfully."
     else:
-        return False
+        return f"Product Not found."
 def profileItems(userid):
     profile_items = session.query(Product, Profile).join(Profile).filter(Product.id == Profile.product_id,Profile.user_id == userid).all()
 
@@ -310,3 +331,16 @@ def purchase_items():
 def user_items():
     result=session.query(User).filter(User.id==Profile.user_id, User.role=='user').all()
     return result
+
+def Managersignin(email, password):
+    u1 = session.query(User).filter(User.email == email, User.password == password).first()
+    if u1 and u1.role == 'manager':
+        return u1
+    else:
+        return None
+
+def exportdetails():
+    result=session.query(Product, Profile).join(Profile).filter(Product.id == Profile.product_id, User.id==Profile.user_id).all()
+
+    return result
+
