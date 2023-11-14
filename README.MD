@@ -27,3 +27,6 @@ For Users the functionalities are <br> Login, View Products category-wise, Add t
 4. Bootstrap (Frontend)
 5. Jinja2 (HTML injection)
 6. SQLAlchemy (SQLite connection)
+
+
+# celery -A app.celery worker -l info
