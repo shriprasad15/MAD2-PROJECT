@@ -341,10 +341,13 @@ def Managersignin(email, password):
         return None
 
 def exportdetails():
-    p1=Profile(user_id=1, product_id=1, quantity=1, date_purchased='2021-08-15')
-    p2=Profile
-    result=session.query(Product, Profile).join(Profile).filter(Product.id == Profile.product_id, User.id==Profile.user_id).all()
-
+    result = session.query(
+        Product.name,
+        Product.quantity,
+        Product.rate_per_unit,
+        func.sum(Profile.quantity).label('total_quantity')
+    ).join(Profile, Product.id == Profile.product_id) \
+        .group_by(Product.id).all()
     return result
 def unit_sold(product_id):
     result= session.query(Profile).filter(Profile.product_id==product_id).all()

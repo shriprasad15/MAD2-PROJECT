@@ -1,2 +1,3 @@
 /env/
 /mad2/backend/.env/
+**/__pycache__/**

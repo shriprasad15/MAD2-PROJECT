@@ -2,7 +2,7 @@ from flask_restful import Resource, Api, marshal, reqparse, fields, marshal_with
 from models import *
 from flask import request
 import csv, os
-from task import send_welcome_msg
+from task import send_welcome_msg, generate_csv
 
 class Homepage(Resource):
     def get(self):
@@ -225,26 +225,11 @@ export_data= reqparse.RequestParser()
 # export_data.add_argument()
 class exports(Resource):
     def get(self):
-    # remove csv file if already exists
-        for file in os.listdir('./instance'):
-            if file.endswith(".csv"):
-                os.remove(f'./instance/{file}')
-        with open(f'./instance/name.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Product Name", "stock_left","rate", "units sold"])
-            result=exportdetails()
-            print(result)
-            for row in result:
-                name, stock_left, rate_per_unit, total_quantity = row
-                print(
-                    f"Product Name: {name},Stock Left {stock_left}, Rate per Unit: {rate_per_unit}, Total Quantity: {total_quantity}")
-
-                writer.writerow(row)        # to send file to user as download
-        from flask import send_file
-        return send_file(f'./instance/name.csv', as_attachment=True)
-
+        data = generate_csv.delay()
+        return "CSV file is being generated, you will receive a mail once done."
 
 class Celery_API(Resource):
     def get(self):
         data = send_welcome_msg.delay("Hello Celery")
         return "Task completed"
+
