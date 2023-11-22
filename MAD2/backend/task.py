@@ -11,7 +11,7 @@ def send_welcome_msg(data):
     print(time.time())
     time.sleep(10)
     print(time.time())
-    return "Gokul"
+    return "Test"
 
 webhook_url = 'https://chat.googleapis.com/v1/spaces/AAAABN4yDm8/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=bdFYUNx6xyL2btWwQDrHKIflDVhQBJ66rSs-vcREwjA'
 
@@ -33,12 +33,12 @@ def generate_csv():
             writer.writerow(row)  # to send file to user as download
 
     # Message content to send
-    message = 'CSV sent after generating. Click here to download: http://127.0.0.1:8080/download_csv'
+    message = 'CSV sent after generating. Click here to download: http://127.0.0.1:8081/download_csv'
     return send_message(webhook_url, message)
 
 @celery.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(crontab(hour=20,minute=19), engagment.s(), name='Monthly Report')
+    sender.add_periodic_task(crontab(hour=17,minute=6), engagment.s(), name='Monthly Report')
     sender.add_periodic_task(timedelta(seconds=30), engagment.s(), name="Secondly report")
     # sender.add_periodic_task(crontab(minute=0, hour=0), daily_reminder.s(), name='daily reminders')
 

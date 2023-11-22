@@ -85,7 +85,7 @@ prod.add_argument('quantity')
 # prod.add_argument('edit_prod')
 
 prod_fields={
-    'prod_name': fields.String,
+    'name': fields.String,
     'manufacture_date': fields.String,
     'expiry_date': fields.String,
     'rate_per_unit': fields.Integer,
@@ -150,6 +150,7 @@ class Product_API(Resource):
             return "Error"
 
 class ProductCRUD(Resource):
+    @marshal_with(prod_fields)
     def get(self, prod_id):
         return prodCat(prod_id)
 

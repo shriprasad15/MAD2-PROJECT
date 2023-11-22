@@ -4,4 +4,10 @@
   - For this we need 2 APIs
     - Get_all_unapproved managers.
     - approve manager by id
-  - 
+
+# Vue installation
+- Install npm and node.js from website
+- https://nodejs.org/en Install latest LTS
+- To install vue:
+  sudo npm install -g @vue/cli
+- vue create frontend

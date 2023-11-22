@@ -2,6 +2,7 @@ from flask import Flask,render_template,request,redirect,url_for,session
 from flask_restful import Resource, Api
 from config import Config
 from workers import *
+from flask_cors import CORS
 
 app = Flask(__name__, template_folder="templates")
 app.config.from_object(Config)
@@ -46,5 +47,7 @@ from flask import send_file
 def download_csv():
     return send_file(f'./instance/name.csv', as_attachment=True)
 
+CORS(app)
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8081, debug=True)
