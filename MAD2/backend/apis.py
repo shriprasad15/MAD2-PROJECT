@@ -1,8 +1,10 @@
 from flask_restful import Resource, Api, marshal, reqparse, fields, marshal_with
+
 from models import *
 from flask import request
 import csv, os
 from task import send_welcome_msg, generate_csv
+import jwt
 
 class Homepage(Resource):
     def get(self):
@@ -54,12 +56,19 @@ class Login(Resource):
         args=login_data.parse_args()
         email=args["email"]
         password=args['password']
+
         if Adminsignin(email, password):
-            return 'Admin Logged in'
+            u1 = session.query(User).filter(User.email == email, User.password == password).first()
+            token = jwt.encode({'user': u1.id, 'role': 'admin'}, "HashSecret", algorithm="HS256")
+            return token
         elif Usersignin(email, password):
-            return 'User Logged in'
+            u1 = session.query(User).filter(User.email == email, User.password == password).first()
+            token = jwt.encode({'user': u1.id, 'role': 'user'}, "HashSecret", algorithm="HS256")
+            return token
         elif Managersignin(email, password):
-            return 'Manager Logged in'
+            u1 = session.query(User).filter(User.email == email, User.password == password).first()
+            token = jwt.encode({'user': u1.id, 'role': 'manager'}, "HashSecret", algorithm="HS256")
+            return token
         else:
             return "Error"
 

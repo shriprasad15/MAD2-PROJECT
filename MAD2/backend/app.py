@@ -8,10 +8,12 @@ app = Flask(__name__, template_folder="templates")
 app.config.from_object(Config)
 from models import *
 from apis import *
-
+# with app.app_context():
 api = Api(app)
 api.add_resource(Homepage,'/')
 api.add_resource(UserApi, '/user_signup')
+
+api.add_resource(Login, '/login')
 
 api.add_resource(Category, '/category') # get and post
 api.add_resource(CategoryCRUD, "/category/<id>")

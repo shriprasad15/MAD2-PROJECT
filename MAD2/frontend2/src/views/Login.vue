@@ -70,7 +70,7 @@ export default {
         const user = ref(null);
         const err = ref('');
         const loginUser = async () => {
-            const response = await fetch("http://localhost:5050/login", {
+            const response = await fetch("http://localhost:8081/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
