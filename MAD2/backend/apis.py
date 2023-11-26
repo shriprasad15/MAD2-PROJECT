@@ -1,8 +1,9 @@
 from flask_restful import Resource, Api, marshal, reqparse, fields, marshal_with
 
-from models import *
+from database import AddProduct, DeleteCategory, DeleteProduct, EditCategory, ProductUpdate, addcart, cartProducts, deleteProductCart, fetch_category, fetch_product_cat, prodCat, signup, updateQuantity, validateCategory_id, validateCategory_name, validateProduct, validateSignup, Adminsignin, Usersignin, Managersignin, fetch_all_user, AddCategory
 from flask import request
 import csv, os
+from database import db
 from task import send_welcome_msg, generate_csv
 import jwt
 
@@ -53,20 +54,21 @@ login_data.add_argument('password')
 class Login(Resource):
 
     def post(self):
+        from models import User
         args=login_data.parse_args()
         email=args["email"]
         password=args['password']
 
         if Adminsignin(email, password):
-            u1 = session.query(User).filter(User.email == email, User.password == password).first()
+            u1 = db.session.query(User).filter(User.email == email, User.password == password).first()
             token = jwt.encode({'user': u1.id, 'role': 'admin'}, "HashSecret", algorithm="HS256")
             return token
         elif Usersignin(email, password):
-            u1 = session.query(User).filter(User.email == email, User.password == password).first()
+            u1 = db.session.query(User).filter(User.email == email, User.password == password).first()
             token = jwt.encode({'user': u1.id, 'role': 'user'}, "HashSecret", algorithm="HS256")
             return token
         elif Managersignin(email, password):
-            u1 = session.query(User).filter(User.email == email, User.password == password).first()
+            u1 = db.session.query(User).filter(User.email == email, User.password == password).first()
             token = jwt.encode({'user': u1.id, 'role': 'manager'}, "HashSecret", algorithm="HS256")
             return token
         else:
@@ -206,7 +208,7 @@ class CartCRUD(Resource):
     def get(self,id, userid ):
         return None
     def put(self, id, userid):
-        args= cart.parse_args()
+        args= cart_fields.parse_args()
         quantity= args['quantity']
         updateQuantity(userid, id, quantity)
         return "Quantity Updated"

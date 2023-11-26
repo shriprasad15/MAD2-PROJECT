@@ -2,7 +2,7 @@ from workers import celery
 import time
 from datetime import timedelta
 import csv, os
-from models import exportdetails
+from database import exportdetails
 from utils import send_message
 from celery.schedules import crontab
 

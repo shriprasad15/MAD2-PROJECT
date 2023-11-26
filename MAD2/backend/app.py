@@ -2,30 +2,58 @@ from flask import Flask,render_template,request,redirect,url_for,session
 from flask_restful import Resource, Api
 from config import Config
 from workers import *
+from flask_security import SQLAlchemySessionUserDatastore, Security
 from flask_cors import CORS
+from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
 
-app = Flask(__name__, template_folder="templates")
-app.config.from_object(Config)
-from models import *
-from apis import *
+
+from apis import Homepage, UserApi, Login, Category, CategoryCRUD, Product_API, ProductCRUD, Cart, CartCRUD, exports, Celery_API
+
+
+def create_app():
+    app = Flask(__name__, template_folder="templates")
+    app.config.from_object(Config)
+    with app.app_context():
+        from models import db, User, Role
+        
+
+    db.init_app(app)
+    api = Api(app)
+    CORS(app)
+    user_datastore = SQLAlchemySessionUserDatastore(db.session, User, Role) 
+    app.security = Security(app, user_datastore)
+    
+    with app.app_context():
+        
+        db.create_all()
+        app.security.datastore.find_or_create_role(name="student")
+        app.security.datastore.find_or_create_role(name="faculty")
+        app.security.datastore.find_or_create_role(name="admin")
+        db.session.commit()
+
+    api.add_resource(Homepage,'/')
+    api.add_resource(UserApi, '/user_signup')
+
+    api.add_resource(Login, '/login')
+
+    api.add_resource(Category, '/category') # get and post
+    api.add_resource(CategoryCRUD, "/category/<id>")
+
+    api.add_resource(Product_API, '/product/cat/<int:cat_id>')
+    api.add_resource(ProductCRUD,'/product/<prod_id>')
+
+    api.add_resource(Cart, '/cart/<user_id>')
+    api.add_resource(CartCRUD, '/cart/<id>/<userid>')
+
+    api.add_resource(exports, "/export")
+    api.add_resource(Celery_API, "/celery")
+
+    return app,api
+
+app, api = create_app()
 # with app.app_context():
-api = Api(app)
-api.add_resource(Homepage,'/')
-api.add_resource(UserApi, '/user_signup')
+    
 
-api.add_resource(Login, '/login')
-
-api.add_resource(Category, '/category') # get and post
-api.add_resource(CategoryCRUD, "/category/<id>")
-
-api.add_resource(Product_API, '/product/cat/<int:cat_id>')
-api.add_resource(ProductCRUD,'/product/<prod_id>')
-
-api.add_resource(Cart, '/cart/<user_id>')
-api.add_resource(CartCRUD, '/cart/<id>/<userid>')
-
-api.add_resource(exports, "/export")
-api.add_resource(Celery_API, "/celery")
 
 def celery_func():
     # cache.init_app(app)
@@ -49,7 +77,7 @@ from flask import send_file
 def download_csv():
     return send_file(f'./instance/name.csv', as_attachment=True)
 
-CORS(app)
+
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8081, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
