@@ -1,4 +1,4 @@
-from flask_login import UserMixin
+from flask_user import UserMixin
 from sqlalchemy import Column, Integer, String,Boolean, Date, ForeignKey,or_
 from sqlalchemy.orm import relationship,declarative_base, joinedload
 from datetime import datetime
@@ -23,7 +23,9 @@ class User(db.Model, UserMixin):
     mobile = Column(Integer)
     email = Column(String, unique=True)
     password = Column(String)
-    authenticated = db.Column(db.Boolean())
+    is_authenticated = db.Column(db.Boolean())
+    active = Column(Boolean, default=True)
+    is_anonymous = Column(Boolean, default=False)
     is_approved = Column(Boolean)
     fs_uniquifier=Column(String)
     carts = relationship("Cart")
@@ -33,7 +35,12 @@ class User(db.Model, UserMixin):
     @property
     def is_authorised(self):
         return self.authenticated
-
+    
+    # to return a list of roles as list of strings
+    @property
+    def get_roles(self):
+        return [role.name for role in self.roles]
+    
     def __repr__(self):
         return '<User %r>' % self.fname
 

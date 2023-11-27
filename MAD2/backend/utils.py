@@ -22,3 +22,16 @@ def send_message(webhook_url, message):
 
 # import requests
 
+import jwt
+
+def generate_auth_token(user,role, expires_in = 600):
+    return jwt.encode({'user': user.id, 'role': role}, "HashSecret", algorithm="HS256")
+
+@staticmethod
+def verify_auth_token(token):
+    from models import User
+    try:
+        data = jwt.decode(token, "HashSecret", algorithm=['HS256'])
+    except:
+        return
+    return User.query.get(data['id'])

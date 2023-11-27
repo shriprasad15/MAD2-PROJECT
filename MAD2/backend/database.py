@@ -1,18 +1,22 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, text
+from werkzeug.security import check_password_hash, generate_password_hash
 
 db = SQLAlchemy()
 
-from flask import current_app
+from flask import current_app as app
 # from models import User, Category, Product, Cart, Profile
 
 
 from datetime import datetime
-def signup(fname, lname,mobile, email, password):
+def signup(fname, lname,mobile, email, password,role,is_active,is_approved):
     from models import User
-    user1 = User(fname=fname, lname=lname,mobile=mobile, email=email, password=password, role='user')
-    db.session.add(user1)
+    user=app.security.datastore.create_user( fname=fname, lname=lname,mobile=mobile, email=email, password=generate_password_hash(password), roles=[role])
+    user.active=True
+    # to return the user object, we need to commit the session
+
     db.session.commit()
+    user1=db.session.query(User).filter(User.email==email).first()
     return user1
 
 def validateSignup(email):
@@ -23,10 +27,16 @@ def validateSignup(email):
     return True
 def Usersignin(email, password):
     from models import User
-    u1=db.session.query(User).filter(User.email==email, User.password==password).first()
-    if u1 and u1.role=='user':
-        return u1
+    u1=db.session.query(User).filter(User.email==email).first()
+    if u1 and check_password_hash(u1.password,password):
+        if u1 and 'user' in u1.get_roles:
+            print("user found")
+            return u1
+        else:
+            print("user not found")
+            return None
     else:
+        print("user not found")
         return None
 def fetch_user(userid):
     from models import User
@@ -60,14 +70,20 @@ def cartProducts(userid):
     cart=db.session.query(Cart).filter(Cart.user_id==userid ).all()
     return cart
 def cartItems(userid, productid):
-    from models import User
+    from models import Cart
     items=db.session.query(Cart).filter(Cart.user_id==userid, Cart.product_id == productid).first()
     return items
 
 def Adminsignin(email, password):
     from models import User
-    u1=db.session.query(User).filter(User.email==email, User.password==password).first()
-    if u1 and u1.role=='admin':
+    # print(User.query.filter(User.email == email).first().password)
+    # we need to check hashed password
+    
+    u1=db.session.query(User).filter(User.email==email).first()
+    # print(check_password_hash(u1.password,password))
+    print("Admin")
+    print(u1)
+    if u1 and 'admin' in u1.get_roles:
         return True
     else:
         False
@@ -136,7 +152,10 @@ def EditCategory(newName, id):
         oldName=category.name
         category.name=newName
         db.session.commit()
-        return f"Category {oldName} has been changed to {newName}"
+        response= category
+        response.message =f"Category {oldName} has been changed to {newName}"
+        return response
+    
 def fetch_category():
     from models import Category
     u1= db.session.query(Category).all()
@@ -262,6 +281,7 @@ def user_items():
     return result
 
 def Managersignin(email, password):
+    from models import User
     u1 = db.session.query(User).filter(User.email == email, User.password == password).first()
     if u1 and u1.role == 'manager':
         return u1
@@ -289,7 +309,9 @@ def unit_sold(product_id):
         s+=r.quantity
     print(s)
     return s
-from flask import current_app
+
+
+
 def fun():
   from models import User, Category, Product, Cart, Profile
   user1 = User(fname='Teddy',lname='Bear', email='teddy@mrbean.com', password='ted', role='admin', is_approved=True)

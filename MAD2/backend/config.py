@@ -9,6 +9,7 @@ class Config:
     CELERY_IMPORTS = ('backend.applicaiton.task')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY= 'HashValue'
+    SECURITY_DEFAULT_REMEMBER_ME= True
     CACHE_TYPE = 'RedisCache'
     USER_ENABLE_EMAIL = False
     CACHE_DEFAULT_TIMEOUT = 300

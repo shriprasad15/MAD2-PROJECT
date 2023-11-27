@@ -1,12 +1,15 @@
 from flask_restful import Resource, Api, marshal, reqparse, fields, marshal_with
+from urllib3 import HTTPResponse
 
 from database import AddProduct, DeleteCategory, DeleteProduct, EditCategory, ProductUpdate, addcart, cartProducts, deleteProductCart, fetch_category, fetch_product_cat, prodCat, signup, updateQuantity, validateCategory_id, validateCategory_name, validateProduct, validateSignup, Adminsignin, Usersignin, Managersignin, fetch_all_user, AddCategory
-from flask import request
+from flask import abort, request
 import csv, os
 from database import db
+from flask_security import login_user, current_user, login_required, logout_user
 from task import send_welcome_msg, generate_csv
 import jwt
-
+from utils import generate_auth_token
+from flask import g, current_app
 class Homepage(Resource):
     def get(self):
         return {"hello": "World"}
@@ -20,18 +23,19 @@ user_data.add_argument('lname')
 user_data.add_argument('mobile')
 user_data.add_argument('email')
 user_data.add_argument('password')
+user_data.add_argument('role')
 
 user_fields= {
     'fname': fields.String,
     'lname': fields.String,
     'mobile': fields.Integer,
     'email': fields.String,
-    'role': fields.String
+    'get_roles': fields.List(fields.String),
 }
 
 class UserApi(Resource):
     @marshal_with(user_fields)
-    def get(self,query):
+    def get(self):
         return fetch_all_user()
 
     @marshal_with(user_fields)
@@ -39,12 +43,12 @@ class UserApi(Resource):
         args=user_data.parse_args()
         email= args['email']
         if validateSignup(email):
-            user=signup(fname=args['fname'], lname= args['lname'], mobile=args['mobile'], email=args['email'], password=args['password'])
+            
+            user=signup(fname=args['fname'], lname= args['lname'], mobile=args['mobile'], email=args['email'], password=args['password'],role="user",is_active=True, is_approved=True)
             return user
         else:
-            pass
-
-#Login API
+            print("User already exists")
+            abort(409,'User already exists')
 
 login_data= reqparse.RequestParser()
 
@@ -55,18 +59,30 @@ class Login(Resource):
 
     def post(self):
         from models import User
+        # if g.user is not None and g.user.is_authenticated:
+        #     return "Already logged in"
         args=login_data.parse_args()
         email=args["email"]
         password=args['password']
-
+        print(email, password)
         if Adminsignin(email, password):
-            u1 = db.session.query(User).filter(User.email == email, User.password == password).first()
-            token = jwt.encode({'user': u1.id, 'role': 'admin'}, "HashSecret", algorithm="HS256")
+            print("Admin logged in ")
+            
+            u1 = db.session.query(User).filter(User.email == email).first()
+            # login_user(u1)
+            token = generate_auth_token(u1,"admin", expires_in = 600)
+            g.user = u1
             return token
+        
         elif Usersignin(email, password):
-            u1 = db.session.query(User).filter(User.email == email, User.password == password).first()
-            token = jwt.encode({'user': u1.id, 'role': 'user'}, "HashSecret", algorithm="HS256")
+            print("aaaaagokul",current_user.is_authenticated)
+            if current_user.is_authenticated:
+                return "Log out first to login again"
+            u1 = db.session.query(User).filter(User.email == email).first()
+            login_user(u1)
+            token = generate_auth_token(u1,"user", expires_in = 600)
             return token
+        
         elif Managersignin(email, password):
             u1 = db.session.query(User).filter(User.email == email, User.password == password).first()
             token = jwt.encode({'user': u1.id, 'role': 'manager'}, "HashSecret", algorithm="HS256")
@@ -84,7 +100,8 @@ update_cat.add_argument('edit_cat')
 
 cat_fields={
     'name': fields.String,
-    'id': fields.Integer
+    'id': fields.Integer,
+    'message': fields.String
 }
 
 prod= reqparse.RequestParser()
@@ -115,7 +132,7 @@ class Category(Resource):
         args=cat.parse_args()
         cat_name=args['cat_name']
         if validateCategory_name(cat_name):
-            AddCategory(cat_name)
+            
             return AddCategory(cat_name)
         else:
             return "Error"
@@ -128,7 +145,7 @@ class CategoryCRUD(Resource):
     @marshal_with(cat_fields)
     def put(self, id):
         args=update_cat.parse_args()
-        new_name=args['name']
+        new_name=args['edit_cat']
         if validateCategory_id(id):
             return EditCategory(new_name, id)
         else:
