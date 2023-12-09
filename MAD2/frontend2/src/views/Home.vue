@@ -2,7 +2,7 @@
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <nav class="navbar navbar-dark navbar-expand-lg bg-dark border-bottom  border-primary ">
         <div class="container-fluid">
-            <div style="cursor: pointer;" class="navbar-brand">Ticket</div>
+            <div style="cursor: pointer;" class="navbar-brand">Grocery App</div>
           <router-link class="btn btn-primary" to="/login">Login </router-link>
 
         </div>
