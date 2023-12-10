@@ -1,4 +1,5 @@
-from flask_user import UserMixin
+
+from flask_security import UserMixin, RoleMixin
 from sqlalchemy import Column, Integer, String,Boolean, Date, ForeignKey,or_
 from sqlalchemy.orm import relationship,declarative_base, joinedload
 from datetime import datetime
