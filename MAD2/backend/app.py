@@ -5,28 +5,31 @@ from config import Config
 from workers import *
 from flask_security import SQLAlchemySessionUserDatastore, Security
 from flask_cors import CORS
-from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
+
+from sec import datastore
+from apis import api
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from apis import Homepage, UserApi, Login, Category, CategoryCRUD, Product_API, ProductCRUD, Cart, CartCRUD, exports, Celery_API
 from flask_login import LoginManager
+
 
 def create_app():
     app = Flask(__name__, template_folder="templates")
     app.config.from_object(Config)
     with app.app_context():
         from models import db, User, Role
-        
-    login = LoginManager(app)
+    api.init_app(app)
     db.init_app(app)
-    api = Api(app)
+    
     CORS(app)
-    # user_datastore = SQLAlchemySessionUserDatastore(db.session, User, Role) 
-    # app.security = Security(app, user_datastore)
-    user_manager = UserManager(app, db, User)
+    
+    app.security = Security(app,datastore)
+    
     
     with app.app_context():
         db.create_all()
+      
         if Role.query.count() == 0:
             print("Creating Database")
             
@@ -58,12 +61,11 @@ def create_app():
     return app,api
 
 app, api = create_app()
-# with app.app_context():
     
-from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
-login = LoginManager(app)
+with app.app_context():
+    import views
 
-@login.user_loader
+# @login.user_loader
 def load_user(id):
     from models import User
     return User.query.get(int(id))
@@ -72,28 +74,6 @@ def load_user(id):
 def home_page():
     return render_template_string("home page")
 
-# The Members page is only accessible to authenticated users
-@app.route('/members')
-@login_required    # Use of @login_required decorator
-def member_page():
-    return render_template_string("""
-            {% extends "flask_user_layout.html" %}
-            {% block content %}
-                <h2>Members page</h2>
-                <p><a href={{ url_for('user.register') }}>Register</a></p>
-                <p><a href={{ url_for('user.login') }}>Sign in</a></p>
-                <p><a href={{ url_for('home_page') }}>Home Page</a> (accessible to anyone)</p>
-                <p><a href={{ url_for('member_page') }}>Member Page</a> (login_required: member@example.com / Password1)</p>
-                <p><a href={{ url_for('admin_page') }}>Admin Page</a> (role_required: admin@example.com / Password1')</p>
-                <p><a href={{ url_for('user.logout') }}>Sign out</a></p>
-            {% endblock %}
-            """)
-
-    # The Admin page requires an 'Admin' role.
-@app.route('/admin')
-@roles_required('Admin')    # Use of @roles_required decorator
-def admin_page():
-    return render_template_string("admin only")
 
     
 

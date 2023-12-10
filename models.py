@@ -87,6 +87,9 @@ product4 = Product(name='Nachos', manufacture_date='2023-07-25', expiry_date='20
 engine = create_engine('sqlite:///grocery.db')
 Base.metadata.create_all(engine)
 
+
+
+
 Session2 = sessionmaker(bind=engine)
 session = Session2()
 

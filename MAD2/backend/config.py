@@ -8,7 +8,7 @@ class Config:
     CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
     CELERY_IMPORTS = ('backend.applicaiton.task')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY= 'HashValue'
+    SECRET_KEY= 'thisissecter'
     SECURITY_DEFAULT_REMEMBER_ME= True
     CACHE_TYPE = 'RedisCache'
     USER_ENABLE_EMAIL = False

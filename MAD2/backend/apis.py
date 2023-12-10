@@ -10,6 +10,15 @@ from task import send_welcome_msg, generate_csv
 import jwt
 from utils import generate_auth_token
 from flask import g, current_app
+
+from flask_security import auth_required, roles_required, current_user
+
+api = Api(prefix='/api')
+
+
+
+
+
 class Homepage(Resource):
     def get(self):
         return {"hello": "World"}
