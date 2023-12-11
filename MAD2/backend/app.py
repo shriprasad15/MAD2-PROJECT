@@ -1,16 +1,17 @@
 import os
 from flask import Flask, g, jsonify,render_template, render_template_string,request,redirect,url_for,session
-from flask_restful import Resource, Api
+from flask_security import current_user, auth_required, login_required, roles_required, roles_accepted
+from flask_restful import Api, Resource, reqparse, fields, marshal_with, marshal
 from config import Config
 from workers import *
 from flask_security import SQLAlchemySessionUserDatastore, Security
 from flask_cors import CORS
-
-from sec import datastore
+from database import fun
+from sec import datastore, db
 from apis import api
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from apis import Homepage, UserApi, Login, Category, CategoryCRUD, Product_API, ProductCRUD, Cart, CartCRUD, exports, Celery_API
+from models import Category
+from apis import Homepage, UserApi, Login, Category_resource, CategoryCRUD, Product_API, ProductCRUD, Cart, CartCRUD, exports, Celery_API
 from flask_login import LoginManager
 
 
@@ -18,13 +19,14 @@ def create_app():
     app = Flask(__name__, template_folder="templates")
     app.config.from_object(Config)
     with app.app_context():
-        from models import db, User, Role
+        from models import User, Role
     api.init_app(app)
     db.init_app(app)
-    
+    user_datastore = SQLAlchemySessionUserDatastore(db.session, User, Role) # Not SQLAlchemyUserDatastore
+    app.security = Security(app, user_datastore)
     CORS(app)
     
-    app.security = Security(app,datastore)
+    # app.security = Security(app,datastore)
     
     
     with app.app_context():
@@ -36,31 +38,34 @@ def create_app():
             r1=app.security.datastore.find_or_create_role(name="user")
             r2=app.security.datastore.find_or_create_role(name="manager")
             r3=app.security.datastore.find_or_create_role(name="admin")
-            u1=app.security.datastore.create_user( email="admin@gmail.com", password=generate_password_hash("admin"), roles=["admin", "manager", "user"])
+            u1=app.security.datastore.create_user( email="admin@gmail.com", password=generate_password_hash("password"), roles=["admin", "manager", "user"], fname="admin", lname="admin", mobile=1234567890,username="admin")
             db.session.commit()
+        elif Category.query.count() == 0:
+            fun()
         else:
             print("Database already exists")
 
-    api.add_resource(Homepage,'/')
-    api.add_resource(UserApi, '/user')
+    # api.add_resource(Homepage,'/')
+    # api.add_resource(UserApi, '/user')
 
-    api.add_resource(Login, '/login_user')
+    # api.add_resource(Login, '/login_user')
 
-    api.add_resource(Category, '/category') # get and post
-    api.add_resource(CategoryCRUD, "/category/<id>")
+    # api.add_resource(Category_resource, '/category') # get and post
+    # api.add_resource(CategoryCRUD, "/category/<id>")
 
-    api.add_resource(Product_API, '/product/cat/<int:cat_id>')
-    api.add_resource(ProductCRUD,'/product/<prod_id>')
+    # api.add_resource(Product_API, '/product/cat/<int:cat_id>')
+    # api.add_resource(ProductCRUD,'/product/<prod_id>')
 
-    api.add_resource(Cart, '/cart/<user_id>')
-    api.add_resource(CartCRUD, '/cart/<id>/<userid>')
+    # api.add_resource(Cart, '/cart/<user_id>')
+    # api.add_resource(CartCRUD, '/cart/<id>/<userid>')
 
-    api.add_resource(exports, "/export")
-    api.add_resource(Celery_API, "/celery")
+    # api.add_resource(exports, "/export")
+    # api.add_resource(Celery_API, "/celery")
 
-    return app,api
+    return app
 
-app, api = create_app()
+app= create_app()
+
     
 with app.app_context():
     import views
@@ -75,8 +80,66 @@ def home_page():
     return render_template_string("home page")
 
 
-    
 
+@app.route('/create-role/<string:role>')
+# @login_required('token')
+@roles_required('admin')
+def create_role(role):
+
+    app.security.datastore.create_role(name=role)
+    db.session.commit()
+
+    return "Role Created Successfully"
+    
+@app.route('/create-user', methods=['POST'])
+def create_user():
+    from models import User, Role,UserRoles
+    data=request.get_json()
+    app.security.datastore.create_user(email=data.get('email'), password=generate_password_hash(data.get("password")),roles=data.get('roles'),fname=data.get("fname"),lname=data.get("lname"),mobile=data.get("mobile"),username=data.get("username"))
+    db.session.commit()
+    email = data.get('email')
+
+    return email
+
+
+def add_user(email,username,fname,lname,mobile,password,roles):
+    app.security.datastore.create_user(email=email,username=username,fname=fname,lname=lname,mobile=mobile,password=password,roles=roles)
+    db.session.commit()
+    return email
+
+
+def find_user(email):
+    return datastore.find_user(email=email)
+
+
+login_data= reqparse.RequestParser()
+
+login_data.add_argument('email')
+login_data.add_argument('password')
+@app.route('/login_user', methods=['POST'])
+def logiin(self):
+        from models import User
+        args=login_data.parse_args()
+        email=args["email"]
+        password=args['password']
+        print(email, password)
+
+        # verify_email and password\
+        # to verify password, use check_password_hash
+        # to verify email, use User.query.filter_by(email=email).first()
+
+        user = find_user(email)
+
+        print(user.email)
+        if not user:
+            return jsonify({"message": "User Not Found"}), 404
+        if check_password_hash(user.password, password):
+            login_user(user)
+            print("password matched")
+            return jsonify({"token": user.get_auth_token(), "email": user.email, "role": get_user_roles(user.roles)})
+        else:
+            print("password not matched")
+            return jsonify({"message": "Wrong Password"}), 400
 
 
 
@@ -101,6 +164,7 @@ from flask import send_file
 @app.route('/download_csv')
 def download_csv():
     return send_file(f'./instance/name.csv', as_attachment=True)
+
 
 
 

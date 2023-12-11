@@ -21,14 +21,15 @@ class User(db.Model, UserMixin):
 
     fname = Column(String)
     lname = Column(String)
+    username = db.Column(db.String(255), unique=True, nullable=True)
     mobile = Column(Integer)
-    email = Column(String, unique=True)
+    email = Column(String, unique=True, nullable=False)
     password = Column(String)
     is_authenticated = db.Column(db.Boolean())
-    active = Column(Boolean, default=True)
-    is_anonymous = Column(Boolean, default=False)
-    is_approved = Column(Boolean)
-    fs_uniquifier=Column(String)
+    active = db.Column(db.Boolean())
+    authenticated = db.Column(db.Boolean())
+    fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False)
+    
     carts = relationship("Cart")
     roles = db.relationship('Role', secondary='user_roles',
                          backref=db.backref('users', lazy='dynamic'))
@@ -43,9 +44,9 @@ class User(db.Model, UserMixin):
         return [role.name for role in self.roles]
     
     def __repr__(self):
-        return '<User %r>' % self.fname
+        return '<User %r>' % self.email
 
-class Role(db.Model):
+class Role(db.Model, RoleMixin):
         __tablename__ = 'roles'
         id = Column(Integer(), primary_key=True)
         name = Column(String(50), unique=True)

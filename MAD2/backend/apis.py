@@ -1,17 +1,17 @@
+
 from flask_restful import Resource, Api, marshal, reqparse, fields, marshal_with
-from urllib3 import HTTPResponse
+
 
 from database import AddProduct, DeleteCategory, DeleteProduct, EditCategory, ProductUpdate, addcart, cartProducts, deleteProductCart, fetch_category, fetch_product_cat, prodCat, signup, updateQuantity, validateCategory_id, validateCategory_name, validateProduct, validateSignup, Adminsignin, Usersignin, Managersignin, fetch_all_user, AddCategory
-from flask import abort, request
-import csv, os
-from database import db
-from flask_security import login_user, current_user, login_required, logout_user
-from task import send_welcome_msg, generate_csv
-import jwt
-from utils import generate_auth_token
-from flask import g, current_app
+from flask import abort, jsonify, request
 
-from flask_security import auth_required, roles_required, current_user
+
+from werkzeug.security import check_password_hash, generate_password_hash
+from database import db
+from task import send_welcome_msg, generate_csv
+
+from flask_security import SQLAlchemySessionUserDatastore, Security, login_user, logout_user
+from flask_security import current_user, auth_required, login_required, roles_required, roles_accepted,login_user, logout_user,auth_token_required
 
 api = Api(prefix='/api')
 
@@ -23,8 +23,6 @@ class Homepage(Resource):
     def get(self):
         return {"hello": "World"}
 
-
-#Signup API
 user_data= reqparse.RequestParser()
 
 user_data.add_argument('fname')
@@ -32,7 +30,8 @@ user_data.add_argument('lname')
 user_data.add_argument('mobile')
 user_data.add_argument('email')
 user_data.add_argument('password')
-user_data.add_argument('role')
+user_data.add_argument('roles')
+user_data.add_argument('username')
 
 user_fields= {
     'fname': fields.String,
@@ -43,33 +42,29 @@ user_fields= {
 }
 
 class UserApi(Resource):
-    @marshal_with(user_fields)
+    @auth_required('token')
+    @roles_required('admin')
     def get(self):
-        return fetch_all_user()
+        print(request.headers)
+        print(current_user)
+        return marshal(fetch_all_user(), user_fields)
 
-    @marshal_with(user_fields)
-    def post(self):
-        args=user_data.parse_args()
-        email= args['email']
-        if validateSignup(email):
-            
-            user=signup(fname=args['fname'], lname= args['lname'], mobile=args['mobile'], email=args['email'], password=args['password'],role="user",is_active=True, is_approved=True)
-            return user
-        else:
-            print("User already exists")
-            abort(409,'User already exists')
+
 
 login_data= reqparse.RequestParser()
 
 login_data.add_argument('email')
 login_data.add_argument('password')
 
+def get_user_roles(roles):
+    return [role.name for role in roles]
+
+
 class Login(Resource):
 
     def post(self):
         from models import User
-        # if g.user is not None and g.user.is_authenticated:
-        #     return "Already logged in"
+        from app import find_user
         args=login_data.parse_args()
         email=args["email"]
         password=args['password']
@@ -99,6 +94,23 @@ class Login(Resource):
         else:
             return "Error"
 
+        # verify_email and password\
+        # to verify password, use check_password_hash
+        # to verify email, use User.query.filter_by(email=email).first()
+
+        user = find_user(email)
+
+        print(user.email)
+        if not user:
+            return jsonify({"message": "User Not Found"}), 404
+        if check_password_hash(user.password, password):
+            login_user(user)
+            print("password matched")
+            return jsonify({"token": user.get_auth_token(), "email": user.email, "role": get_user_roles(user.roles)})
+        else:
+            print("password not matched")
+            return jsonify({"message": "Wrong Password"}), 400
+        
 #Admin Functionalities
 
 cat=reqparse.RequestParser()
@@ -129,12 +141,17 @@ prod_fields={
     'quantity': fields.Integer,
     'category_id': fields.Integer
 }
-class Category(Resource):
-    @marshal_with(cat_fields)
+class Category_resource(Resource):
+    # @marshal_with(cat_fields)
+    @auth_required()
+    # @login_required
+    # @auth_token_required()
+    @roles_required('user')
     def get(self): #fetch all cat
+        # print(current_user)
         result=fetch_category()
-        print(result)
-        return result
+        # print(result)
+        return marshal(result, cat_fields)
 
     @marshal_with(cat_fields)
     def post(self):
@@ -270,4 +287,22 @@ class Celery_API(Resource):
     def get(self):
         data = send_welcome_msg.delay("Hello Celery")
         return "Task completed"
+
+
+api.add_resource(Homepage,'/')
+api.add_resource(UserApi, '/user')
+
+api.add_resource(Login, '/login_user')
+
+api.add_resource(Category_resource, '/category') # get and post
+api.add_resource(CategoryCRUD, "/category/<id>")
+
+api.add_resource(Product_API, '/product/cat/<int:cat_id>')
+api.add_resource(ProductCRUD,'/product/<prod_id>')
+
+api.add_resource(Cart, '/cart/<user_id>')
+api.add_resource(CartCRUD, '/cart/<id>/<userid>')
+
+api.add_resource(exports, "/export")
+api.add_resource(Celery_API, "/celery")
 

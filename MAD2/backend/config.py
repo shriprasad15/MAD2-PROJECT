@@ -9,9 +9,10 @@ class Config:
     CELERY_IMPORTS = ('backend.applicaiton.task')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY= 'thisissecter'
-    SECURITY_DEFAULT_REMEMBER_ME= True
+    SECURITY_PASSWORD_SALT="daykdhudtashkyfuh"
+    SECURITY_TOKEN_AUTHENTICATION_KEY='auth_token'
+    SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Authentication-Token'
     CACHE_TYPE = 'RedisCache'
-    USER_ENABLE_EMAIL = False
     CACHE_DEFAULT_TIMEOUT = 300
     CACHE_REDIS_HOST = os.environ.get('CACHE_REDIS_HOST')
     CACHE_REDIS_PASSWORD = os.environ.get('CACHE_REDIS_PASSWORD')

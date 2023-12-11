@@ -1,10 +1,11 @@
 
 from flask import current_app as app, jsonify, request, render_template, send_file
+from flask_security import login_user, current_user, login_required, logout_user
 from flask_security import auth_required, roles_required
 from sec import datastore
 
 from werkzeug.security import generate_password_hash
-from models import db
+from models import User, db
 from werkzeug.security import check_password_hash
 
 
@@ -32,25 +33,33 @@ def user_signup():
 @app.post('/user-login')
 def user_login():
     data = request.get_json()
+    
     email = data.get('email')
     if not email:
         return jsonify({"message": "email not provided"}), 400
 
-    user = datastore.find_user(email=email)
+    user = User.query.filter_by(email=email).first()
+    print(user.email)
 
     if not user:
         return jsonify({"message": "User Not Found"}), 404
-
+    def get_roles(roles):
+        return [role.name for role in roles]
     if check_password_hash(user.password, data.get("password")):
-        return jsonify({"token": user.get_auth_token(), "email": user.email, "role": user.roles[0].name})
+        # print(user)
+        # x=login_user(user)  
+        # print(x)
+        print(current_user)
+        return jsonify({"token": user.get_auth_token(), "email": user.email, "role": get_roles(user.roles)})
     else:
         return jsonify({"message": "Wrong Password"}), 400
 
 
 
 @app.get('/admin')
-@auth_required("token")
-@roles_required("admin")
+@login_required
+# @auth_required("token")
+# @roles_required('admin')
 def admin():
     return "Hello Admin"
 

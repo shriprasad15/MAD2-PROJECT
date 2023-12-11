@@ -303,8 +303,8 @@ def unit_sold(product_id):
     from models import Profile
     result= db.session.query(Profile).filter(Profile.product_id==product_id).all()
     s=0
-    print("gokul")
-    print(result)
+    # print("gokul")
+    # print(result)
     for r in result:
         s+=r.quantity
     print(s)
@@ -313,38 +313,32 @@ def unit_sold(product_id):
 
 
 def fun():
-  from models import User, Category, Product, Cart, Profile
-  user1 = User(fname='Teddy',lname='Bear', email='teddy@mrbean.com', password='ted', role='admin', is_approved=True)
-  user2 = User(fname='Ken',lname='Adams', email='ken@adams.com', mobile=1234,password='1234', role='user',is_approved=True)
-  user3= User(fname='Shri',lname='Prasad', email='shri@prasad.com', mobile=5678,password='1111', role='manager',is_approved=False)
-  category1 = Category(name='Fruits')
-  category2 = Category(name='Snacks')
+    from models import User, Category, Product, Cart, Profile
+    # user1 = User(fname='Teddy',lname='Bear', email='teddy@mrbean.com', password='ted', role='admin', is_approved=True)
+    # user2 = User(fname='Ken',lname='Adams', email='ken@adams.com', mobile=1234,password='1234', role='user',is_approved=True)
+    # user3= User(fname='Shri',lname='Prasad', email='shri@prasad.com', mobile=5678,password='1111', role='manager',is_approved=False)
+    category1 = Category(name='Fruits')
+    category2 = Category(name='Snacks')
 
-  product1 = Product(name='Apple', manufacture_date='2023-08-15', expiry_date='2023-08-19', rate_per_unit=90, category_id=1, quantity=20)
-  product2 = Product(name='Watermelon', manufacture_date='2023-08-10', expiry_date='2023-08-15', rate_per_unit=40, category_id=1, quantity=15)
-  product3 = Product(name='Potato Chips', manufacture_date='2023-07-30', expiry_date='2023-08-11', rate_per_unit=35, category_id=2, quantity=5)
-  product4 = Product(name='Nachos', manufacture_date='2023-07-25', expiry_date='2023-07-30', rate_per_unit=50, category_id=2, quantity=3)
-
-# Usage:
-
-
-# engine = create_engine('sqlite:///grocery.db')
-# db.Model.metadata.create_all(engine)
-
-# Session2 = sessionmaker(bind=engine)
+    product1 = Product(name='Apple', manufacture_date='2023-08-15', expiry_date='2023-08-19', rate_per_unit=90, category_id=1, quantity=20)
+    product2 = Product(name='Watermelon', manufacture_date='2023-08-10', expiry_date='2023-08-15', rate_per_unit=40, category_id=1, quantity=15)
+    product3 = Product(name='Potato Chips', manufacture_date='2023-07-30', expiry_date='2023-08-11', rate_per_unit=35, category_id=2, quantity=5)
+    product4 = Product(name='Nachos', manufacture_date='2023-07-25', expiry_date='2023-07-30', rate_per_unit=50, category_id=2, quantity=3)
 
 
 
-  with current_app.app_context():
-      db.session.execute(text("DELETE FROM carts"))
-      db.session.execute(text("DELETE FROM products"))
-      db.session.execute(text("DELETE FROM categories"))
-      db.session.execute(text("DELETE FROM users"))
-      # db.session.execute(text("DELETE FROM profile"))
-      db.session.commit()
 
-      db.session.add_all([ user2,user1, user3,category1, category2, product1, product2, product3, product4])
-      db.session.commit()
+    with app.app_context():
+        db.session.execute(text("DELETE FROM carts"))
+        db.session.execute(text("DELETE FROM products"))
+        db.session.execute(text("DELETE FROM categories"))
+        # db.session.execute(text("DELETE FROM users"))
+        # db.session.execute(text("DELETE FROM profile"))
+        db.session.commit()
+
+        db.session.add_all([ category1, category2, product1, product2, product3, product4])
+        db.session.commit()
+        print("data added successfully")
 
 
 # app.app_context().push()
