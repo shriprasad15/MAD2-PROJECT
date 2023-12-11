@@ -83,7 +83,7 @@ class Login(Resource):
             g.user = u1
             return token
         
-        elif Usersignin(email, password):
+        elif Usersign   in(email, password):
             print("aaaaagokul",current_user.is_authenticated)
             if current_user.is_authenticated:
                 return "Log out first to login again"

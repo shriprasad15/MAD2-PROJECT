@@ -104,7 +104,7 @@
 
 
                   </div><br>
-                  <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="/userSignup"
+                  <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="/user-signup"
                       style="color: #393f81;">Register here</a></p>
                 <a href="/"><button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Home</button></a>
 <!--                </form>-->
@@ -121,77 +121,70 @@
 </template>
 
 <script>
-
 import { ref } from "vue";
-export default {
-    name: "Login",
-    setup() {
-        const email = ref();
-        const password = ref();
-        const user = ref(null);
-        const err = ref('');
-        const loginUser = async () => {
-            const response = await fetch("http://localhost:8080/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email: email.value.value,
-                    password: password.value.value,
-                }),
-            });
-            const data = await response.json();
-            console.log(data);
-            if (response.status === 200) {
-                user.value = data.message;
-                sessionStorage.setItem("token", JSON.stringify(user.value));
-                console.log(user.value);
-                window.location.href = "/home";
-            } else {
-                console.log(data.err);
-                if(data.err){
-                    err.value = data.err;
-                    setTimeout(() => {
-                        err.value = '';
-                    }, 3000);
-                }
-                else{
-                    err.value = "Something went wrong";
-                    setTimeout(() => {
-                        err.value = '';
-                    }, 3000);
-                }
-            }
-        }
-        const handleLogin = () => {
-            console.log(email.value.value, password.value.value);
-            loginUser();
-        }
-        const password_show_hide = () => {
-            var x = document.getElementById("password");
-            var show_eye = document.getElementById("show_eye");
-            var hide_eye = document.getElementById("hide_eye");
-            hide_eye.classList.remove("d-none");
-            if (x.type === "password") {
-                x.type = "text";
-                show_eye.style.display = "none";
-                hide_eye.style.display = "block";
-            } else {
-                x.type = "password";
-                show_eye.style.display = "block";
-                hide_eye.style.display = "none";
-            }
-        }
 
-        return {
-            email,
-            err,
-            password,
-            handleLogin,
-            password_show_hide
+export default {
+  name: "Login",
+  setup() {
+    const email = ref(''); // Initialize with an empty string
+    const password = ref(''); // Initialize with an empty string
+    const user = ref(null);
+    const err = ref('');
+    console.log(email, password);
+    const loginUser = async () => {
+      const response = await fetch("http://localhost:8080/user-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        body: JSON.stringify({
+          email: email.value, // Access the ref directly without `.value`
+          password: password.value, // Access the ref directly without `.value`
+
+        }),
+
+      });
+
+      const data = await response.json();
+      // console.log(data);
+      if (response.status === 200) {
+        user.value = data.message;
+        sessionStorage.setItem("token", JSON.stringify(user.value));
+        console.log(user.value);
+        window.location.href = "/home";
+      } else {
+        console.log(data.err);
+        if (data.err) {
+          err.value = data.err;
+          setTimeout(() => {
+            err.value = '';
+          }, 3000);
+        } else {
+          err.value = "Something went wrong";
+          setTimeout(() => {
+            err.value = '';
+          }, 3000);
         }
-    }
+      }
+    };
+
+    const handleLogin = () => {
+      console.log(email.value, password.value); // Access values without `.value`
+      console.log("Check");
+      loginUser();
+    };
+
+    // Rest of your functions remain unchanged
+
+    return {
+      email,
+      err,
+      password,
+      handleLogin,
+      // Other functions and values
+    };
+  },
 };
 </script>
+
 
