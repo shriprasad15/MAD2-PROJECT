@@ -4,6 +4,7 @@ import Login from "@/views/UserLogin.vue";
 import Signup from "@/views/UserSignup.vue";
 import UserSignup from "@/views/UserSignup.vue";
 import UserDashboard from "@/views/UserDashboard.vue";
+import AdminDashboard from "@/views/AdminDashboard.vue";
 
 const routes = [
   // {
@@ -38,6 +39,11 @@ const routes = [
     path:'/user-signup',
     name:'user-signup',
     component: UserSignup
+  },
+    {
+    path:'/admin-dashboard',
+    name:'admin-dashboard',
+    component: AdminDashboard
   },
 
 ]
