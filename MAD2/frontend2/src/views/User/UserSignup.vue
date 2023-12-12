@@ -106,12 +106,10 @@ export default {
     const mobile = ref('');
     const email = ref('');
     const password = ref('');
-    const user = ref(null);
-    const err = ref(null);
-    const errModal = ref(false);
-
+    const role= "user";
+    console.log(firstName.value);
     const handleSignup = async () => {
-      const res = await fetch("http://localhost:5050/signup", {
+      const res = await fetch("http://localhost:5003/create-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -122,6 +120,7 @@ export default {
           mobile: mobile.value,
           email: email.value,
           password: password.value,
+          role:role.value,
         }),
       });
 
@@ -149,8 +148,7 @@ export default {
       mobile,
       email,
       password,
-      err,
-      errModal,
+      role,
     };
   },
 };

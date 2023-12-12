@@ -70,11 +70,11 @@
         <div class="card" style="border-radius: 1rem;">
           <div class="row g-0">
             <div class="col-md-6 col-lg-5 d-none d-md-block">
-              <img src="../../static/mrbean_login.jpg"
+              <img src="../../../static/mrbean_login.jpg"
                 alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 0;" height="273"/>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-                <img src="../../static/mrbean_login.jpg"
+                <img src="../../../static/mrbean_login.jpg"
                 alt="login form" class="img-fluid" style="border-radius: 0 0 0 1rem;" height="273"/>
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
@@ -106,7 +106,7 @@
                   </div><br>
                   <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="/user-signup"
                       style="color: #393f81;">Register here</a></p>
-                <a href="/"><button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Home</button></a>
+                <a href="/MAD2/frontend2/static"><button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Home</button></a>
 <!--                </form>-->
 
               </div>

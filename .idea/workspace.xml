@@ -4,7 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4bc1d3f-df1c-4ec8-b886-1f78304378a6" name="Changes" comment="" />
+    <list default="true" id="e4bc1d3f-df1c-4ec8-b886-1f78304378a6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/api_helpers/helpers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminDashboard.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminLogin.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/CreateCategory.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/DeleteCategory.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/EditCategory.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CreateProduct.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/DeleteProduct.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/EditProduct.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerLogin.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerSignup.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/components/Nav.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/AdminDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerDashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/UserDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserDashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/UserSignup.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserSignup.vue" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,9 +35,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="Python Script" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
+        <option value="Gherkin feature file" />
         <option value="Vue Composition API Component" />
       </list>
     </option>
@@ -81,10 +104,11 @@
       <recent name="$PROJECT_DIR$/MAD2/frontend2/static" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/MAD2/frontend2/src/views/User" />
+      <recent name="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager" />
+      <recent name="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin" />
       <recent name="$PROJECT_DIR$/MAD2/frontend2/src/views" />
       <recent name="$PROJECT_DIR$/MAD2/frontend/src/components" />
-      <recent name="$PROJECT_DIR$/MAD2/frontend/src" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager">
@@ -146,7 +170,8 @@
       <workItem from="1702144290330" duration="156000" />
       <workItem from="1702172220902" duration="3055000" />
       <workItem from="1702249574669" duration="598000" />
-      <workItem from="1702292084970" duration="5086000" />
+      <workItem from="1702292084970" duration="6555000" />
+      <workItem from="1702353390377" duration="20911000" />
     </task>
     <servers />
   </component>
@@ -169,7 +194,14 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/MAD2/backend/apis.py</url>
+          <line>1</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/DeleteCategory.vue</url>
+          <line>23</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

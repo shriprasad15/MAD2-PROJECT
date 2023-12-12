@@ -1,8 +1,9 @@
 <template>
   <div>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-    <h1>Admin dashboard</h1>
+    <h1>Manager dashboard</h1>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <button class="navbar-toggler" type="button" @click="toggleNavbar">
@@ -11,18 +12,7 @@
         <div class="collapse navbar-collapse" :class="{ 'show': isNavbarOpen }" id="navbarNavDropdown">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <router-link to="/" class="nav-link" aria-current="page">Home</router-link>
-            </li>
-
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" @click="toggleCategoryDropdown">
-                Category Operations
-              </a>
-              <ul class="dropdown-menu" :class="{ 'show': isCategoryDropdownOpen }">
-                <li v-for="item in categoryItems" :key="item">
-                  <router-link :to="`/admin_dashboard/${item}`" class="dropdown-item">{{ item }}</router-link>
-                </li>
-              </ul>
+              <router-link to="/admin-dashboard" class="nav-link" aria-current="page">Home</router-link>
             </li>
 
             <li class="nav-item dropdown">
@@ -31,7 +21,7 @@
               </a>
               <ul class="dropdown-menu" :class="{ 'show': isProductDropdownOpen }">
                 <li v-for="item in productItems" :key="item">
-                  <router-link :to="`/admin_dashboard/${item}`" class="dropdown-item">{{ item }}</router-link>
+                  <router-link :to="`/manager-dashboard/${item}`" class="dropdown-item">{{ item }}</router-link>
                 </li>
               </ul>
             </li>
@@ -89,44 +79,40 @@
 </template>
 
 <script>
+import {fetchCategories} from "../../../api_helpers/helpers";
+
 export default {
+
   name: 'ProductList',
   props: {
     msg: String,
     error: String,
-    category_items: Array,
-    product_items: Array,
+
   },
   data() {
     return {
       isNavbarOpen: false,
       isCategoryDropdownOpen: false,
       isProductDropdownOpen: false,
-      categoryItems: ['Create_Category', 'Delete_Category', 'Edit_Category'],
-      productItems: ['Create_Product', 'Delete_Product', 'Edit_Product'],
+      productItems: ['Create-Product', 'Delete-Product', 'Edit-Product'],
+      category_items: [],
+      product_items: [],
     };
   },
-  methods: {
-    toggleNavbar() {
-      this.isNavbarOpen = !this.isNavbarOpen;
-    },
-    toggleCategoryDropdown() {
-      this.isCategoryDropdownOpen = !this.isCategoryDropdownOpen;
-    },
-    toggleProductDropdown() {
-      this.isProductDropdownOpen = !this.isProductDropdownOpen;
-    },
-  },
+
   created() {
     this.fetchProducts();
-    this.fetchCategories();
+  },
+  mounted() {
+    this.assign();
   },
   methods: {
     async fetchProducts() {
       try {
-        const response = await fetch('YOUR_PRODUCTS_API_URL');
+        const response = await fetch('http://127.0.0.1:5003/api/products');
+        const data = await response.json();
+        console.log(data)
         if (response.ok) {
-          const data = await response.json();
           this.product_items = data;
         } else {
           console.error('Failed to fetch products');
@@ -135,18 +121,17 @@ export default {
         console.error('Error fetching products:', error);
       }
     },
-    async fetchCategories() {
-      try {
-        const response = await fetch('YOUR_CATEGORIES_API_URL');
-        if (response.ok) {
-          const data = await response.json();
-          this.category_items = data;
-        } else {
-          console.error('Failed to fetch categories');
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
+    async assign() {
+      this.category_items = await fetchCategories();
+    },
+    toggleNavbar() {
+      this.isNavbarOpen = !this.isNavbarOpen;
+    },
+    toggleCategoryDropdown() {
+      this.isCategoryDropdownOpen = !this.isCategoryDropdownOpen;
+    },
+    toggleProductDropdown() {
+      this.isProductDropdownOpen = !this.isProductDropdownOpen;
     },
   },
 };
