@@ -4,6 +4,7 @@
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
     <h1>Admin dashboard</h1>
+
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <button class="navbar-toggler" type="button" @click="toggleNavbar">
@@ -27,14 +28,14 @@
             </li>
 
             <li class="nav-item">
-              <router-link to="/manager-list" class="nav-link" aria-current="page">Manager Control</router-link>
+              <router-link to="/admin-dashboard/Approve-Requests" class="nav-link" aria-current="page">Manager Control</router-link>
             </li>
 
             <li class="nav-item">
-              <router-link to="/summary" class="nav-link" aria-current="page">Summary</router-link>
+              <router-link to="#" class="nav-link" aria-current="page">Summary</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/logout" class="nav-link" aria-current="page">Logout</router-link>
+              <router-link to="#" class="nav-link" aria-current="page">Logout</router-link>
             </li>
           </ul>
         </div>
@@ -51,15 +52,15 @@
     </div>
 
     <div class="container mt-5">
-      <h1 class="mb-4">Category List</h1>
+<!--      <h1 class="mb-4">Category List</h1>-->
+      <h1 class="mb-4">{{category_items.length===0?"No Categories": "Category List"}}</h1>
       <ul class="list-group">
         <li v-for="category in category_items" :key="category.id" class="list-group-item">{{ category.name }}</li>
       </ul>
     </div>
 
     <div class="container mt-5">
-      <h1 class="mb-4">Product List</h1>
-      <div class="row">
+      <h1 class="mb-4">{{product_items.length===0?"No Products": "Product List"}}</h1>      <div class="row">
         <div v-for="product in product_items" :key="product.id" class="col-md-4">
           <div class="card mb-4">
             <div class="card-body">
@@ -83,7 +84,7 @@
 </template>
 
 <script>
-import {fetchCategories} from "../../../api_helpers/helpers";
+import {fetchCategories, fetchProducts} from "../../../api_helpers/helpers";
 
 export default {
 
@@ -104,29 +105,14 @@ export default {
     };
   },
 
-  created() {
-    this.fetchProducts();
-  },
   mounted() {
     this.assign();
   },
   methods: {
-    async fetchProducts() {
-      try {
-        const response = await fetch('http://127.0.0.1:5003/api/products');
-        const data = await response.json();
-        console.log(data)
-        if (response.ok) {
-          this.product_items = data;
-        } else {
-          console.error('Failed to fetch products');
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    },
+
     async assign() {
       this.category_items = await fetchCategories();
+      this.product_items= await fetchProducts()
     },
     toggleNavbar() {
       this.isNavbarOpen = !this.isNavbarOpen;

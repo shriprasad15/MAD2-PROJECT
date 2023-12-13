@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse" :class="{ 'show': isNavbarOpen }" id="navbarNavDropdown">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <router-link to="/admin-dashboard" class="nav-link" aria-current="page">Home</router-link>
+              <router-link to="/manager-dashboard" class="nav-link" aria-current="page">Home</router-link>
             </li>
 
             <li class="nav-item dropdown">
@@ -26,6 +26,19 @@
               </ul>
             </li>
 
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" @click="toggleCategoryDropdown">
+                Category Operations
+              </a>
+              <ul class="dropdown-menu" :class="{ 'show': isCategoryDropdownOpen }">
+                <li v-for="item in categoryItems" :key="item">
+                  <router-link :to="`/manager-dashboard/${item}`" class="dropdown-item">{{ item }}</router-link>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <router-link to="/manager-dashboard/Manager-PendingRequests" class="nav-link" aria-current="page">Pending Requests</router-link>
+            </li>
             <li class="nav-item">
               <router-link to="/summary" class="nav-link" aria-current="page">Summary</router-link>
             </li>
@@ -79,8 +92,7 @@
 </template>
 
 <script>
-import {fetchCategories} from "../../../api_helpers/helpers";
-
+import {fetchCategories, fetchPendingCategories, fetchProducts} from "../../../api_helpers/helpers";
 export default {
 
   name: 'ProductList',
@@ -95,34 +107,19 @@ export default {
       isCategoryDropdownOpen: false,
       isProductDropdownOpen: false,
       productItems: ['Create-Product', 'Delete-Product', 'Edit-Product'],
+      categoryItems: ['Create-Category', 'Delete-Category', 'Edit-Category'],
       category_items: [],
       product_items: [],
     };
   },
-
-  created() {
-    this.fetchProducts();
-  },
+  
   mounted() {
     this.assign();
   },
   methods: {
-    async fetchProducts() {
-      try {
-        const response = await fetch('http://127.0.0.1:5003/api/products');
-        const data = await response.json();
-        console.log(data)
-        if (response.ok) {
-          this.product_items = data;
-        } else {
-          console.error('Failed to fetch products');
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    },
     async assign() {
       this.category_items = await fetchCategories();
+      this.product_items= await fetchProducts();
     },
     toggleNavbar() {
       this.isNavbarOpen = !this.isNavbarOpen;

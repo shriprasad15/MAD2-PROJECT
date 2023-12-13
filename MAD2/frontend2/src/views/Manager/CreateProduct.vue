@@ -4,28 +4,29 @@
   <div>
     <h1>Manager dashboard</h1>
 
-    <form @submit.prevent="editProduct" class="mb-5">
-      <h3>Edit Product</h3>
-      <h5>Select Product to Edit</h5>
-      <select v-model="selectedProductName" style="height: 40px;">
-        <option v-for="item in dropdownItems" :key="item.id" :value="item.name">{{ item.name }}</option>
+    <form @submit.prevent="addProductToCategory" class="mb-5">
+    <h3>Create Product</h3>
+      <h5>Select Category to add Product</h5>
+      <select v-model="selectedCategory" style="height: 40px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        <option v-for="item in dropdownItems" :key="item.id" :value="item.id">{{ item.name }}</option>
       </select>
 
+
       <div class="form-floating mb-3">
-        <input type="text" aria-label="Category Name" v-model="newProductName" class="form-control">
-        <label for="floatingInput">Product New Name</label>
+        <input type="text" aria-label="Category Name" v-model="productName" class="form-control">
+        <label for="floatingInput">Product Name</label>
       </div>
 
       <div>
         <label for="m_date">Manufacture date:</label><br>
-        <input type="date" id="m_date" v-model="manufactureDate" name="manufacture_date">
+          <input type="date" id="m_date" v-model="manufactureDate" name="manufacture_date" required pattern="\d{4}-\d{2}-\d{2}">
       </div>
 
       <br>
 
       <div>
         <label for="e_date">Expiry date:</label><br>
-        <input type="date" id="e_date" v-model="expiryDate" name="expiry_date">
+        <input type="date" id="e_date" v-model="expiryDate" name="expiry_date" required pattern="\d{4}-\d{2}-\d{2}">
       </div><br>
 
       <div class="form-floating mb-3">
@@ -73,45 +74,45 @@ export default {
     async addProductToCategory() {
       try {
         if (!this.productName.trim()) {
-          console.error('Product name cannot be empty');
+          this.error = 'Product name cannot be empty';
           return;
         }
 
         if (!this.selectedCategory) {
-          console.error('Please select a category');
+          this.error = 'Please select a category';
           return;
         }
         console.log(this.selectedCategory);
-        const response = await fetch(`http://127.0.0.1:5003/api/product/cat/${this.selectedCategory.id}`, {
-
+        const response = await fetch(`http://127.0.0.1:5003/api/product/cat/${this.selectedCategory}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: this.productName,
-            manufactureDate: this.manufactureDate,
-            expiryDate: this.expiryDate,
-            ratePerUnit: this.ratePerUnit,
+            prod_name: this.productName,
+            mdate: this.manufactureDate,
+            edate: this.expiryDate,
+            rate: this.ratePerUnit,
             quantity: this.quantity,
           }),
         });
 
         if (response.ok) {
-          console.log('Product added to category successfully');
+          this.msg = 'Product added to category successfully';
+          // Reset form fields after successful addition if needed
           this.productName = '';
           this.manufactureDate = '';
           this.expiryDate = '';
           this.ratePerUnit = 0;
           this.quantity = 0;
-          // Handle other success logic if needed
+          // Fetch and update categories again if necessary
+          await this.assignCategories();
         } else {
-          console.error('Failed to add product to category');
-          // Handle error scenarios or show error messages
+          this.error = 'Failed to add product to category';
         }
       } catch (error) {
         console.error('Error adding product to category:', error);
-        // Handle error scenarios or show error messages
+        this.error = 'Error adding product to category';
       }
     },
 
@@ -120,7 +121,7 @@ export default {
         this.dropdownItems = await fetchCategories();
       } catch (error) {
         console.error('Error fetching categories:', error);
-        // Handle error scenarios or show error messages
+        this.error = 'Error fetching categories';
       }
     },
   },

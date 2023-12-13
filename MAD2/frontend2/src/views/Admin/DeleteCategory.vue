@@ -1,43 +1,27 @@
 <template>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <div>
     <h1>Admin dashboard</h1>
 
-    <form @submit.prevent="deleteCategory" class="mb-5">
+    <form @submit.prevent="showConfirmation" class="mb-5">
       <h3>Delete Category</h3>
       <h5>Select Category to delete</h5>
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" @click="toggleDropdown">
-          {{ selectedCategory ? selectedCategory : 'Select Category to delete' }}
-        </button>
-        <ul v-if="showDropdown" class="dropdown-menu">
-          <li v-for="item in dropdownItems" :key="item.id">
-            <button @click="selectCategory(item.name)" class="dropdown-item" type="button" data-bs-toggle="modal" :data-bs-target="'#exampleModal' + item.name">
-              {{ item.name }}
-            </button>
-          </li>
-        </ul>
+      <div>
+        <select v-model="selectedCategory" class="form-select">
+          <option value="" disabled>Select Category to delete</option>
+          <option v-for="item in dropdownItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+        </select>
       </div>
 
-      <div v-for="item in dropdownItems" :key="item.id" class="modal fade" :id="'exampleModal' + item.name" tabindex="-1" :aria-labelledby="'exampleModalLabel' + item.name" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" :id="'exampleModalLabel' + item.name">Deleting Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              Are you sure you want to delete {{ item.name }}?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <form @submit.prevent="confirmDelete(item.name)">
-                <button type="submit" class="btn btn-danger">Confirm</button>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div>
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </div>
+
+      <div v-if="confirmationBox" class="alert alert-danger mt-3" role="alert">
+        Are you sure you want to delete "{{ selectedCategoryName }}". The products associated with this category would also be deleted.?
+        <button @click="confirmDelete" class="btn btn-danger btn-sm ms-2">Confirm</button>
+        <button @click="cancelDelete" class="btn btn-secondary btn-sm ms-2">Cancel</button>
       </div>
 
       <br>
@@ -48,7 +32,6 @@
   </div>
 </template>
 
-
 <script>
 import { fetchCategories } from "../../../api_helpers/helpers";
 
@@ -56,32 +39,42 @@ export default {
   data() {
     return {
       dropdownItems: [],
-      selectedCategory: null,
-      showDropdown: false,
+      selectedCategory: null, // Store only the ID of the selected category
+      selectedCategoryName: '', // Store the name of the selected category
+      confirmationBox: false, // Control visibility of the confirmation dialog
     };
   },
   methods: {
-    toggleDropdown() {
-      this.showDropdown = !this.showDropdown;
+    async showConfirmation() {
+      if (!this.selectedCategory) {
+        alert('Please select a category');
+        return;
+      }
+
+      const selected = this.dropdownItems.find(item => item.id === this.selectedCategory);
+      if (selected) {
+        this.selectedCategoryName = selected.name;
+        this.confirmationBox = true;
+      }
     },
-    selectCategory(category) {
-      this.selectedCategory = category;
-      this.showDropdown = false;
-    },
+
     async deleteCategory() {
+      console.log(this.selectedCategory);
       try {
-        if (!this.selectedCategory) {
-          console.error('Please select a category');
-          return;
-        }
-        const response = await fetch(`http://127.0.0.1:5003/api/category/${this.selectedCategory.id}`, {
+        const response = await fetch(`http://127.0.0.1:5003/api/category/${this.selectedCategory}`, {
           method: 'DELETE',
         });
+
         if (response.ok) {
-          console.log(`Category '${this.selectedCategory.name}' deleted successfully`);
+
           this.selectedCategory = null;
-          // Refetch categories after deletion
-          this.assign();
+          this.confirmationBox = false;
+          await this.fetchAndSetCategories();
+          alert(`Category '${this.selectedCategoryName}' deleted successfully`);
+          this.selectedCategoryName = '';
+          if (this.dropdownItems.length===0){
+            window.location.href = '/admin-dashboard';
+          }
         } else {
           console.error('Failed to delete category');
         }
@@ -89,12 +82,16 @@ export default {
         console.error('Error deleting category:', error);
       }
     },
-    async confirmDelete(category) {
-      this.selectedCategory = category;
-      this.showDropdown = false;
-      await this.deleteCategory();
+
+    confirmDelete() {
+      this.deleteCategory();
     },
-    async assign() {
+
+    cancelDelete() {
+      this.confirmationBox = false;
+    },
+
+    async fetchAndSetCategories() {
       try {
         this.dropdownItems = await fetchCategories();
       } catch (error) {
@@ -103,7 +100,7 @@ export default {
     },
   },
   mounted() {
-    this.assign();
+    this.fetchAndSetCategories();
   },
 };
 </script>

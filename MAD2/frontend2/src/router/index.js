@@ -16,6 +16,9 @@ import EditCategory from "@/views/Admin/EditCategory.vue";
 import CreateProduct from "@/views/Manager/CreateProduct.vue";
 import DeleteProduct from "@/views/Manager/DeleteProduct.vue";
 import EditProduct from "@/views/Manager/EditProduct.vue";
+import ManagerCreateCategory from "@/views/Manager/ManagerCreateCategory.vue";
+import ManagerPendingRequests from "@/views/Manager/ManagerPendingRequests.vue";
+import AdminCategoryApproval from "@/views/Admin/AdminCategoryApproval.vue";
 
 const routes = [
 
@@ -55,12 +58,13 @@ const routes = [
     {
         path: '/manager-dashboard',
         name: 'manager-dashboard',
-        component: ManagerDashboard
+        component: ManagerDashboard,
+
     },
     {
         path: '/manager-dashboard/Create-Product',
         name: 'create-product',
-        component: CreateProduct
+        component: CreateProduct,
     },
     {
         path: '/manager-dashboard/Delete-Product',
@@ -71,6 +75,18 @@ const routes = [
         path: '/manager-dashboard/Edit-Product',
         name: 'edit-product',
         component: EditProduct
+    },
+    {
+        path: '/manager-dashboard/Create-Category',
+        name: 'manager-create-category',
+        component: ManagerCreateCategory,
+
+    },
+    {
+        path: '/manager-dashboard/Manager-PendingRequests',
+        name: 'manager-pending-requests',
+        component: ManagerPendingRequests,
+
     },
 
     // Admin Functions
@@ -99,6 +115,12 @@ const routes = [
         name: 'admin-edit-category',
         component: EditCategory
     },
+    {
+        path: '/admin-dashboard/Approve-Requests',
+        name: 'admin-approve-category',
+        component: AdminCategoryApproval
+    },
+
 
 ]
 
