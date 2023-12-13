@@ -52,8 +52,6 @@ export default {
           this.categoryName = '';
         } else {
           if (response.ok) {
-            console.log('Category created successfully');
-            alert('Category created successfully');
             this.requestSent = true;
             this.categoryName = '';
           }

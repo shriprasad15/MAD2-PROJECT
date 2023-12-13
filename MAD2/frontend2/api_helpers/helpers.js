@@ -72,3 +72,22 @@ export async function deleteProductById(itemId) {
     return { success: false, message: `Error deleting product: ${error.message}` };
   }
 }
+
+export async function updateProduct(productId, productData) {
+  try {
+    const response = await fetch(`http://127.0.0.1:5003/api/product/${productId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(productData),
+    });
+    return {
+      ok: response.ok,
+      data: await response.json(),
+    };
+  } catch (error) {
+    console.error('Error updating product:', error);
+    throw error;
+  }
+}
