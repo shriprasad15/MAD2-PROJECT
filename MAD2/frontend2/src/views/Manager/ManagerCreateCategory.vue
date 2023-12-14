@@ -2,7 +2,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <div>
-    <h1>Category Dashboard</h1>
     <form @submit.prevent="createCategory" class="mb-5">
       <h5>Send a request to Admin for Category Creation</h5>
       <div class="form-floating mb-3">

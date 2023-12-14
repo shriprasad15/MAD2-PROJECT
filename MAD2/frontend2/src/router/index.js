@@ -19,6 +19,8 @@ import EditProduct from "@/views/Manager/EditProduct.vue";
 import ManagerCreateCategory from "@/views/Manager/ManagerCreateCategory.vue";
 import ManagerPendingRequests from "@/views/Manager/ManagerPendingRequests.vue";
 import AdminCategoryApproval from "@/views/Admin/AdminCategoryApproval.vue";
+import ManagerHome from "@/views/Manager/ManagerHome.vue";
+import AdminHome from "@/views/Admin/AdminHome.vue";
 
 const routes = [
 
@@ -59,35 +61,43 @@ const routes = [
         path: '/manager-dashboard',
         name: 'manager-dashboard',
         component: ManagerDashboard,
+        redirect: '/manager-dashboard/home',
+        children: [
+            {
+                path: 'home',
+                component: ManagerHome
+            },
+            {
+                path: 'Create-Product',
+                component: CreateProduct
+            },
+            {
+                path: 'Delete-Product',
+                name: 'delete-product',
+                component: DeleteProduct
+            },
+            {
+                path: 'Edit-Product',
+                name: 'edit-product',
+                component: EditProduct
+            },
+            {
+                path: 'Create-Category',
+                name: 'manager-create-category',
+                component: ManagerCreateCategory,
+
+            },
+            {
+                path: 'Manager-PendingRequests',
+                name: 'manager-pending-requests',
+                component: ManagerPendingRequests,
+
+            },
+
+        ]
 
     },
-    {
-        path: '/manager-dashboard/Create-Product',
-        name: 'create-product',
-        component: CreateProduct,
-    },
-    {
-        path: '/manager-dashboard/Delete-Product',
-        name: 'delete-product',
-        component: DeleteProduct
-    },
-    {
-        path: '/manager-dashboard/Edit-Product',
-        name: 'edit-product',
-        component: EditProduct
-    },
-    {
-        path: '/manager-dashboard/Create-Category',
-        name: 'manager-create-category',
-        component: ManagerCreateCategory,
 
-    },
-    {
-        path: '/manager-dashboard/Manager-PendingRequests',
-        name: 'manager-pending-requests',
-        component: ManagerPendingRequests,
-
-    },
 
     // Admin Functions
     {
@@ -98,29 +108,36 @@ const routes = [
     {
         path: '/admin-dashboard',
         name: 'admin-dashboard',
-        component: AdminDashboard
-    },
-    {
-        path: '/admin-dashboard/Create-Category',
-        name: 'admin-create-category',
-        component: CreateCategory
-    },
-    {
-        path: '/admin-dashboard/Delete-Category',
-        name: 'admin-delete-category',
-        component: DeleteCategory
-    },
-    {
-        path: '/admin-dashboard/Edit-Category',
-        name: 'admin-edit-category',
-        component: EditCategory
-    },
-    {
-        path: '/admin-dashboard/Approve-Requests',
-        name: 'admin-approve-category',
-        component: AdminCategoryApproval
-    },
+        component: AdminDashboard,
+        redirect: '/admin-dashboard/home',
+        children: [
+            {
+                path: 'home',
+                component: AdminHome
+            },
+            {
+                path: 'Create-Category',
+                name: 'admin-create-category',
+                component: CreateCategory
+            },
+            {
+                path: 'Delete-Category',
+                name: 'admin-delete-category',
+                component: DeleteCategory
+            },
+            {
+                path: 'Edit-Category',
+                name: 'admin-edit-category',
+                component: EditCategory
+            },
+            {
+                path: 'Approve-Requests',
+                name: 'admin-approve-category',
+                component: AdminCategoryApproval
+            },
+        ]
 
+    },
 
 ]
 

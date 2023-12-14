@@ -2,14 +2,14 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <div>
-    <h1>Admin dashboard</h1>
+    <div v-if="msg" class="alert alert-success" role="alert">{{ msg }}</div>
+    <div v-if="error" class="alert alert-danger mt-3" role="alert">{{ error }}</div>
     <form @submit.prevent="submitProduct" class="pt-4">
       <h3>Edit Product</h3>
       <h5>Select Product to edit</h5>
-      <select v-model="selectedProductId" style="height: 40px;">
+      <select v-model="selectedProductId" style="height: 40px; width: 200px">
         <option v-for="item in product_items" :key="item.id" :value="item.id">{{ item.name }}</option>
       </select>
-
 
       <div class="form-floating mb-3">
         <br />
@@ -56,8 +56,7 @@
       </a>
     </form>
 
-    <div v-if="msg" class="alert alert-success" role="alert">{{ msg }}</div>
-    <div v-if="error" class="alert alert-danger mt-3" role="alert">{{ error }}</div>
+
   </div>
 </template>
 
@@ -91,29 +90,14 @@ export default {
       return '';
     },
 
-    async populateProductDetails() {
-      console.log(this.selectedProductId);
-      try {
-        const selectedProduct = this.product_items.find(item => item.id === this.selectedProductId);
-        if (selectedProduct) {
-          this.newProductName = selectedProduct.name;
-          this.manufactureDate = selectedProduct.manufactureDate;
-          this.expiryDate = selectedProduct.expiryDate;
-          this.ratePerUnit = selectedProduct.rate;
-          this.quantity = selectedProduct.quantity;
-          this.newCategoryId = selectedProduct.categoryId;
-        }
-      } catch (error) {
-        console.error('Error populating product details:', error);
-        this.error = 'Error populating product details';
-      }
+    populateProductDetails() {
+
     },
 
 
     async assignProducts() {
       try {
         this.product_items = await fetchProducts();
-        // Populate category_items similarly based on your API response
       } catch (error) {
         console.error('Error fetching products:', error);
         this.error = 'Error fetching products';
@@ -122,7 +106,6 @@ export default {
     async assignCategories() {
       try {
         this.category_items = await fetchCategories();
-        // Populate category_items similarly based on your API response
       } catch (error) {
         console.error('Error fetching categories:', error);
         this.error = 'Error fetching categories';
@@ -140,10 +123,10 @@ export default {
           cat_id: this.newCategoryId,
         };
 
-        const response = await updateProduct(prod_id, productData); // Replace 'updateProduct' with your API call function
+        const response = await updateProduct(this.selectedProductId, productData); // Replace 'updateProduct' with your API call function
         if (response.ok) {
           this.msg = `Product updated successfully`;
-          // Reset form fields or perform any other necessary actions after successful update
+          this.resetForm();
         } else {
           this.error = 'Failed to update product';
         }
@@ -152,11 +135,40 @@ export default {
         this.error = 'Error updating product';
       }
     },
+    resetForm() {
+      this.selectedProductId = null;
+      this.newProductName = '';
+      this.manufactureDate = '';
+      this.expiryDate = '';
+      this.ratePerUnit = null;
+      this.quantity = null;
+      this.newCategoryId = '';
+    },
   },
-  mounted() {
+ mounted() {
     this.assignProducts();
-    this.assignCategories()
+    this.assignCategories();
     this.populateProductDetails();
   },
+  watch:{
+    selectedProductId(){
+      console.log(this.selectedProductId);
+      try {
+        const selectedProduct = this.product_items.find(item => item.id === this.selectedProductId);
+        if (selectedProduct) {
+          this.newProductName = selectedProduct.name;
+          this.manufactureDate = selectedProduct.manufacture_date;
+          this.expiryDate = selectedProduct.expiry_date;
+          this.ratePerUnit = selectedProduct.rate_per_unit;
+          this.quantity = selectedProduct.quantity;
+          this.newCategoryId = selectedProduct.category_id;
+        }
+      } catch (error) {
+        console.error('Error populating product details:', error);
+        this.error = 'Error populating product details';
+      }
+
+    }
+  }
 };
 </script>

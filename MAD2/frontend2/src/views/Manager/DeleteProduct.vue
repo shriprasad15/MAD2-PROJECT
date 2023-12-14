@@ -1,10 +1,10 @@
 <template>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <h2>Manager Dashboard - Delete Product</h2>
+    <h2>Delete Product</h2>
     <br>
     <div>
-      <h3><label for="categorySelect">Select Category to delete Product from</label><br><br></h3>
+      <h4><label for="categorySelect">Select Category to delete Product from</label><br><br></h4>
       <select id="categorySelect" v-model="selectedCategory" @change="fetchProductsByCategory(selectedCategory?selectedCategory:-1)">
         <option value="">Select Category</option>
         <option v-for="item in category_items" :key="item.id" :value="item.id">{{ item.name }}</option>
@@ -16,7 +16,7 @@
     </div>
     <div v-else>
 
-        <h3><label for="productSelect">Select Product to delete</label><br><br></h3>
+        <h4><label for="productSelect">Select Product to delete</label><br><br></h4>
         <select id="productSelect" v-model="selectedProduct">
           <option value="">Select Product</option>
           <option v-for="product in product_items" :key="product.id" :value="product.id">{{ product.name }}</option>

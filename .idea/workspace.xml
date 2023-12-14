@@ -5,10 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4bc1d3f-df1c-4ec8-b886-1f78304378a6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminHome.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerHome.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/api_helpers/helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/api_helpers/helpers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminDashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/CreateCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/CreateCategory.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/DeleteCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/DeleteCategory.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/EditCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/EditCategory.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CreateProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CreateProduct.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/DeleteProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/DeleteProduct.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/EditProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/EditProduct.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerCreateCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerCreateCategory.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerDashboard.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,35 +64,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "flask__sqlalchemy",
-    "last_opened_file_path": "/Users/shriprasad/Desktop/MAD2-PROJECT/MAD2/frontend2/static",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
-    "ts.external.directory.path": "/Applications/PyCharm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;flask__sqlalchemy&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/shriprasad/Desktop/MAD2-PROJECT/MAD2/frontend2/static&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.web.browsers&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/PyCharm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "redis",
-      "sqlite"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;redis&quot;,
+      &quot;sqlite&quot;
     ],
-    "vue.recent.templates": [
-      "Vue Composition API Component",
-      "Vue Options API Component"
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Composition API Component&quot;,
+      &quot;Vue Options API Component&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/MAD2/frontend2/static" />
@@ -157,7 +166,8 @@
       <workItem from="1702249574669" duration="598000" />
       <workItem from="1702292084970" duration="6555000" />
       <workItem from="1702353390377" duration="21655000" />
-      <workItem from="1702438725754" duration="31037000" />
+      <workItem from="1702438725754" duration="31264000" />
+      <workItem from="1702525595629" duration="12381000" />
     </task>
     <servers />
   </component>
