@@ -3,19 +3,29 @@
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <h2>Delete Product</h2>
     <br>
+  <div v-if="msg" class="alert alert-success" role="alert">
+      {{ msg }}
+    </div>
+    <div v-if="error" class="alert alert-danger mt-3" role="alert">
+      {{ error }}
+    </div>
     <div>
+      <div v-if="category_items.length <= 0" class="alert alert-danger">
+        No categories available. Please create one
+      </div>
+      <div v-else>
       <h4><label for="categorySelect">Select Category to delete Product from</label><br><br></h4>
       <select id="categorySelect" v-model="selectedCategory" @change="fetchProductsByCategory(selectedCategory?selectedCategory:-1)">
         <option value="">Select Category</option>
-        <option v-for="item in category_items" :key="item.id" :value="item.id">{{ item.name }}</option>
+        <option v-for="item in category_items" :key="item.id" :value="item.id">{{ item.name[0].oldName }}</option>
       </select>
-    </div>
+
     <br>
-    <div v-if="product_items.length <= 0 && selectedCategory" class="alert alert-danger">
+    <div v-if="product_items.length <= 0 && selectedCategory" class="alert alert-danger mt-4">
       No products available for this category
     </div>
     <div v-else>
-
+        <br>
         <h4><label for="productSelect">Select Product to delete</label><br><br></h4>
         <select id="productSelect" v-model="selectedProduct">
           <option value="">Select Product</option>
@@ -32,20 +42,8 @@
         <button @click="confirmDelete" class="btn btn-danger btn-sm ms-2">Confirm</button>
         <button @click="cancelDelete" class="btn btn-secondary btn-sm ms-2">Cancel</button>
       </div>
-
-
-
-    <br>
-    <a href="/manager-dashboard">
-      <button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Back</button>
-    </a>
-
-    <div v-if="msg" class="alert alert-success" role="alert">
-      {{ msg }}
     </div>
-    <div v-if="error" class="alert alert-danger mt-3" role="alert">
-      {{ error }}
-    </div>
+</div>
 </template>
 
 <script>

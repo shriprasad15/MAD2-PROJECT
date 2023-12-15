@@ -6,54 +6,56 @@
     <div v-if="error" class="alert alert-danger mt-3" role="alert">{{ error }}</div>
     <form @submit.prevent="submitProduct" class="pt-4">
       <h3>Edit Product</h3>
-      <h5>Select Product to edit</h5>
-      <select v-model="selectedProductId" style="height: 40px; width: 200px">
-        <option v-for="item in product_items" :key="item.id" :value="item.id">{{ item.name }}</option>
-      </select>
-
-      <div class="form-floating mb-3">
-        <br />
-        <input type="text" aria-label="Category Name" v-model="newProductName" class="form-control" />
-        <label for="floatingInput">Product New Name</label>
+      <div v-if = "product_items.length <= 0" class="alert alert-danger">
+        No products available. Please create one
       </div>
-
-      <div>
-        <label for="m_date">Manufacture date:</label><br />
-        <input type="date" id="m_date" v-model="manufactureDate" />
-      </div>
-      <br />
-
-      <div>
-        <label for="e_date">Expiry date:</label><br />
-        <input type="date" id="e_date" v-model="expiryDate" />
-      </div>
-      <br />
-
-      <div class="form-floating mb-3">
-        <input type="number" class="form-control" v-model="ratePerUnit" />
-        <label for="floatingInput">Rate per Unit</label>
-      </div>
-
-      <div class="form-floating mb-3">
-        <input type="number" class="form-control" v-model="quantity" />
-        <label for="floatingInput">Quantity</label>
-      </div>
-
-      <div>
-        <h5>Change Category</h5>
-        <p>Current Category: {{ getCategoryName(selectedProductId) }}</p>
-        <select v-model="newCategoryId" style="height: 40px;">
-          <option value="">-- Select New Category --</option>
-          <option v-for="item in category_items" :key="item.id" :value="item.id">{{ item.name }}</option>
+      <div v-else>
+        <h5>Select Product to edit</h5>
+        <select v-model="selectedProductId" style="height: 40px; width: 200px">
+          <option v-for="item in product_items" :key="item.id" :value="item.id">{{ item.name }}</option>
         </select>
-      </div>
 
-      <div class="pt-1 mb-4">
-        <button class="btn btn-lg btn-block" type="submit" style="background-color: #6F4E37; color: white;">Submit</button>
+        <div class="form-floating mb-3">
+          <br />
+          <input type="text" aria-label="Category Name" v-model="newProductName" class="form-control" />
+          <label for="floatingInput">Product New Name</label>
+        </div>
+
+        <div>
+          <label for="m_date">Manufacture date:</label><br />
+          <input type="date" id="m_date" v-model="manufactureDate" />
+        </div>
+        <br />
+
+        <div>
+          <label for="e_date">Expiry date:</label><br />
+          <input type="date" id="e_date" v-model="expiryDate" />
+        </div>
+        <br />
+
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" v-model="ratePerUnit" />
+          <label for="floatingInput">Rate per Unit</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" v-model="quantity" />
+          <label for="floatingInput">Quantity</label>
+        </div>
+
+        <div>
+          <h5>Change Category</h5>
+          <p>Current Category: {{ getCategoryName(selectedProductId) }}</p>
+          <select v-model="newCategoryId" style="height: 40px;">
+            <option value="">-- Select New Category --</option>
+            <option v-for="item in category_items" :key="item.id" :value="item.id">{{ item.name[0].oldName }}</option>
+          </select>
+        </div>
+
+        <div class="pt-1 mb-4">
+          <button class="btn btn-lg btn-block" type="submit" style="background-color: #6F4E37; color: white;">Submit</button>
+        </div>
       </div>
-      <a href="/manager-dashboard">
-        <button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Back</button>
-      </a>
     </form>
 
 
@@ -85,7 +87,7 @@ export default {
       if (selectedProductId) {
         const categoryId = selectedProductId.categoryId;
         const category = this.category_items.find(cat => cat.id === categoryId);
-        return category ? category.name : '';
+        return category ? category.name[0].oldName : '';
       }
       return '';
     },

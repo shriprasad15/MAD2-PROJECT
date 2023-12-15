@@ -1,30 +1,28 @@
 <template>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-  <div class="container mt-5 mb-5">
+  <div>
 
     <form @submit.prevent="showConfirmation" class="mb-5">
-      <h3>Delete Category</h3>
+      <h3>Request Delete Category</h3>
       <div v-if="dropdownItems<=0" class="alert alert-danger mt-4" role="alert">
         No category to delete
       </div>
       <div v-else>
-      <h5>Select Category to delete</h5>
+      <h5>Select Category requesting to delete</h5>
       <div>
-        <select v-model="selectedCategory" class="form-select-lg" style="width: 20%" >
-    <option value="" disabled selected>Select Category to delete</option>
-    <option v-for="item in dropdownItems" :key="item.id" :value="item.id">{{ item.name[0].oldName }}</option>
-</select>
-
-
+        <select v-model="selectedCategory" class="form-select">
+          <option value="" disabled>Select Category to delete</option>
+          <option v-for="item in dropdownItems" :key="item.id" :value="item.id">{{ item.name[0].oldName }}</option>
+        </select>
       </div>
 
       <div>
         <button type="submit" class="btn btn-danger mt-4">Delete</button>
       </div>
 
-      <div v-if="confirmationBox" class="alert alert-danger mt-3" role="alert" style="width: 50%">
-        Are you sure you want to delete "{{ selectedCategoryName[0].oldName }}". The products associated with this category would also be deleted?<br><br>
+      <div v-if="confirmationBox" class="alert alert-danger mt-3" role="alert">
+        Are you sure you want to request for deleting "{{ selectedCategoryName[0].oldName }}" <br>The products associated with this category would also be deleted if approved?
         <button @click="confirmDelete" class="btn btn-danger btn-sm ms-2">Confirm</button>
         <button @click="cancelDelete" class="btn btn-secondary btn-sm ms-2">Cancel</button>
       </div>
@@ -36,7 +34,7 @@
 </template>
 
 <script>
-import { fetchCategories } from "../../../api_helpers/helpers";
+import { fetchCategories } from "../../../../api_helpers/helpers";
 
 export default {
   data() {
@@ -64,8 +62,18 @@ export default {
     async deleteCategory() {
       console.log(this.selectedCategory);
       try {
+        console.log(this.selectedCategoryName[0]['oldName'])
+        const catname = {
+              "old_name": this.selectedCategoryName[0]['oldName'],
+              "new_name": this.selectedCategoryName[0]['oldName'],
+              "is_approved": -1
+          }
         const response = await fetch(`http://127.0.0.1:5003/api/category/${this.selectedCategory}`, {
-          method: 'DELETE',
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(catname),
         });
 
         if (response.ok) {
@@ -73,7 +81,7 @@ export default {
           this.selectedCategory = null;
           this.confirmationBox = false;
           await this.fetchAndSetCategories();
-          alert(`Category '${this.selectedCategoryName[0].oldName}' deleted successfully`);
+          alert(`Category '${this.selectedCategoryName[0].oldName}' delete requested sent`);
           this.selectedCategoryName = '';
           if (this.dropdownItems.length===0){
             window.location.href = '/admin-dashboard';

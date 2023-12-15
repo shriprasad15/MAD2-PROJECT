@@ -17,8 +17,10 @@ export async function fetchPendingCategories() {
 
     const data = await response.json();
     if (!response.ok) {
+
       throw data;
     }
+
     return data
   } catch (error) {
     console.error('Error fetching categories:', error);

@@ -9,13 +9,22 @@
 
     <div class="container mt-5">
       <h1 class="mb-4">Category List</h1>
+      <div v-if="category_items.length === 0" class="alert alert-info" role="alert">
+        No categories available
+      </div>
+      <div v-else>
       <ul class="list-group">
-        <li v-for="category in category_items" :key="category.id" class="list-group-item">{{ category.name }}</li>
+        <li v-for="category in category_items" :key="category.id" class="list-group-item">{{ category.name[0].oldName }}</li>
       </ul>
+        </div>
     </div>
 
     <div class="container mt-5">
       <h1 class="mb-4">Product List</h1>
+      <div v-if="product_items.length === 0" class="alert alert-info" role="alert">
+        No products available
+      </div>
+      <div v-else>
       <div class="row">
         <div v-for="product in product_items" :key="product.id" class="col-md-4">
           <div class="card mb-4">
@@ -24,7 +33,7 @@
               <p class="card-text">
                 Category:
                 <span v-for="category in category_items" :key="category.id">
-                  <span v-if="category.id === product.category_id">{{ category.name }}</span>
+                  <span v-if="category.id === product.category_id">{{ category.name[0].oldName }}</span>
                 </span>
               </p>
               <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
@@ -35,6 +44,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
 </template>
 <script>

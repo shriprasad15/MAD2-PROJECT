@@ -16,11 +16,13 @@ import EditCategory from "@/views/Admin/EditCategory.vue";
 import CreateProduct from "@/views/Manager/CreateProduct.vue";
 import DeleteProduct from "@/views/Manager/DeleteProduct.vue";
 import EditProduct from "@/views/Manager/EditProduct.vue";
-import ManagerCreateCategory from "@/views/Manager/ManagerCreateCategory.vue";
+import ManagerCreateCategory from "@/views/Manager/CategoryRequests/ManagerCreateCategory.vue";
 import ManagerPendingRequests from "@/views/Manager/ManagerPendingRequests.vue";
 import AdminCategoryApproval from "@/views/Admin/AdminCategoryApproval.vue";
 import ManagerHome from "@/views/Manager/ManagerHome.vue";
 import AdminHome from "@/views/Admin/AdminHome.vue";
+import ManagerDeleteCategory from "@/views/Manager/CategoryRequests/ManagerDeleteCategory.vue";
+import ManagerEditCategory from "@/views/Manager/CategoryRequests/ManagerEditCategory.vue";
 
 const routes = [
 
@@ -86,6 +88,17 @@ const routes = [
                 name: 'manager-create-category',
                 component: ManagerCreateCategory,
 
+            },
+            {
+                path: 'Delete-Category',
+                name: 'manager-delete-category',
+                component: ManagerDeleteCategory,
+
+            },
+            {
+                path: 'Edit-Category',
+                name: 'manager-edit-category',
+                component: ManagerEditCategory,
             },
             {
                 path: 'Manager-PendingRequests',

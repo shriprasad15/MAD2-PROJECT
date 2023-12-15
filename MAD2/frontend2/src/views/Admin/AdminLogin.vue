@@ -42,7 +42,7 @@
                     <div class="pt-1 mb-4">
                       <button class="btn btn-lg btn-block" type="submit" style="background-color: #6F4E37; color: white;">Login</button>
                     </div>
-                    <a href="/MAD2/frontend2/static"><button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Home</button></a>
+                    <a href="/"><button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Home</button></a>
 
                   </div>
                 </div>
@@ -56,20 +56,52 @@
 </template>
 
 <script>
+import {ref} from "vue";
+
 export default {
+
   data() {
     return {
       email: '',
       password: '',
+
     };
   },
   props: {
     error: String,
   },
   methods: {
-    submitForm() {
+    async submitForm() {
+      const formData = {
+        email: this.email,
+        password: this.password,
+      };
+      const token=JSON.parse(sessionStorage.getItem('token'));
+      const response = await fetch('http://127.0.0.1:5003/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication-Token': token
+        },
+        body: JSON.stringify(formData),
+      });
 
-      console.log('Submitted:', this.email, this.password);
+      if (response.status=== 200) {
+        console.log('Login successful');
+        // console.log(response)
+        const data = await response.json();
+        // console.log(data)
+        // console.log(data.token)
+        sessionStorage.setItem("token", JSON.stringify(data.token));
+        sessionStorage.setItem("user", JSON.stringify(data.email));
+        sessionStorage.setItem("role", JSON.stringify(data.role));
+        console.log(data.role);
+        alert('Login successful');
+        window.location.href = '/admin-dashboard';
+      } else {
+        console.log('Login failed');
+        alert('Login failed');
+      }
     },
   },
 };

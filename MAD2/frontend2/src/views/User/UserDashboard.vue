@@ -91,7 +91,7 @@
       <div v-if="categories.length > 0">
         <h1 class="mb-4">Product List</h1>
         <div v-for="category in categories" :key="category.id">
-          <h3>Category: {{ category.name }}</h3>
+          <h3>Category: {{ category.name[0].oldName }}</h3>
           <div class="row">
             <div
               class="col-md-4"

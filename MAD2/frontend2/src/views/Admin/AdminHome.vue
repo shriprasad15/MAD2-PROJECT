@@ -10,17 +10,26 @@
     </div>
 
     <div class="container mt-5">
-<!--      <h1 class="mb-4">Category List</h1>-->
-      <h1 class="mb-4">{{category_items.length===0?"No Categories": "Category List"}}</h1>
+      <h1 class="mb-4">Category List</h1>
+      <div v-if="category_items.length === 0" class="alert alert-info" role="alert">
+          No categories available
+        </div>
+      <div v-else>
       <ul class="list-group">
       <li v-for="category in category_items" :key="category.id" class="list-group-item">
-        {{ getCategoryOldName(category.name) }}
+       {{ category.name[0].oldName}}
       </li>
-</ul>
+      </ul>
+        </div>
     </div>
 
     <div class="container mt-5">
-      <h1 class="mb-4">{{product_items.length===0?"No Products": "Product List"}}</h1>      <div class="row">
+      <h1 class="mb-4">Product List</h1>
+      <div v-if="product_items.length === 0" class="alert alert-info" role="alert">
+        No products available
+      </div>
+      <div v-else>
+      <div class="row">
         <div v-for="product in product_items" :key="product.id" class="col-md-4">
           <div class="card mb-4">
             <div class="card-body">
@@ -28,7 +37,7 @@
               <p class="card-text">
                 Category:
                 <span v-for="category in category_items" :key="category.id">
-                  <span v-if="category.id === product.category_id">{{ category.name }}</span>
+                  <span v-if="category.id === product.category_id">{{ category.name[0].oldName }}</span>
                 </span>
               </p>
               <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
@@ -41,9 +50,11 @@
       </div>
     </div>
   </div>
+    </div>
 </template>
 
 <script>
+// console.log(sessionStorage.getItem("token"));
 import {fetchCategories, fetchProducts} from "../../../api_helpers/helpers";
 
 export default {
@@ -63,17 +74,27 @@ export default {
       product_items: [],
     };
   },
-
+  beforeMount() {
+    if (!sessionStorage.getItem("token")) {
+      window.location.href = "/";
+    }
+    // console.log(sessionStorage.getItem("token"));
+    // console.log(JSON.parse(sessionStorage.getItem("role"))[0]);
+    else
+    {
+      if (JSON.parse(sessionStorage.getItem("role"))[0] === "admin") {
+        window.location.href = "/admin-dashboard";
+      }
+      else{
+        window.location.href = "/";
+      }
+    }
+  },
   mounted() {
+
     this.assign();
   },
   methods: {
-    getCategoryOldName(categoryName) {
-      const category = JSON.parse(categoryName.replace(/'/g, '"')); // Parse the name string as JSON
-      console.log(category);
-      return category; // Assuming your 'name' property contains oldName and newName
-    }
-  },
     async assign() {
       this.category_items = await fetchCategories();
       this.product_items= await fetchProducts()
@@ -84,5 +105,6 @@ export default {
     toggleCategoryDropdown() {
       this.isCategoryDropdownOpen = !this.isCategoryDropdownOpen;
     },
+}
 };
 </script>

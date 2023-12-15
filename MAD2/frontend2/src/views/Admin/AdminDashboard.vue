@@ -34,7 +34,8 @@
               <router-link to="#" class="nav-link" aria-current="page">Summary</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="#" class="nav-link" aria-current="page">Logout</router-link>
+
+          <button @click="logout" class="nav-link" >Logout</button>
             </li>
           </ul>
         </div>
@@ -54,6 +55,16 @@ export default {
     msg: String,
     error: String,
 
+  },
+  setup() {
+    const logout = () => {
+      sessionStorage.removeItem("token");
+      console.log(sessionStorage.getItem("token"));
+      window.location.href = "/admin-login";
+    }
+    return {
+      logout
+    }
   },
   data() {
     return {
@@ -81,6 +92,9 @@ export default {
     },
     closeCategoryDropdown() {
       this.isProductDropdownOpen = false;
+    },
+    toggleNavbar() {
+      this.isNavbarOpen = !this.isNavbarOpen;
     },
   },
 };

@@ -1,27 +1,58 @@
 <template>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-  <h1>Pending Requests (Manager Dashboard)</h1>
-  <nav class="navbar navbar-expand-lg bg-body-secondary">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" @click="toggleNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" :class="{ 'show': isNavbarOpen }" id="navbarNavDropdown">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <router-link to="/manager-dashboard" class="nav-link" aria-current="page">Home</router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+
  <div class="container mt-5">
-      <h3 class="mb-4">Pending Create Category</h3>
-      <ul class="list-group">
-        <li v-for="category in pending_category_items" :key="category.id" class="list-group-item">{{ category.name }}</li>
-      </ul>
+  <h2>Pending Requests</h2>
+
+  <!-- Create Category -->
+  <h3 class="mt-4">Create Category</h3>
+  <div v-if="pendingCategoriesCreate.length <= 0" class="alert alert-danger mt-4" role="alert">
+    No requests
     </div>
+  <ul class="list-group">
+    <li v-for="category in pendingCategoriesCreate" :key="category.id" class="list-group-item">
+      {{ category.name[0].oldName }}
+    </li>
+  </ul>
+
+  <!-- Delete Category -->
+  <h3 class="mb-4 mt-5">Delete Category</h3>
+  <div v-if="pendingCategoriesDelete.length <= 0" class="alert alert-danger mt-4" role="alert">
+    No requests
+  </div>
+  <ul class="list-group">
+    <li v-for="category in pendingCategoriesDelete" :key="category.id" class="list-group-item" >
+      {{ category.name[0].oldName }}
+    </li>
+  </ul>
+
+       <h3 class="mb-4 mt-5">Edit Category</h3>
+
+        <div class="table-responsive">
+          <div v-if="pendingCategoriesEdit.length <= 0" class="alert alert-danger mt-4" role="alert">
+            No requests
+          </div>
+          <div v-else>
+          <table class="table table-bordered">
+
+            <thead class="table-primary">
+              <tr>
+                <th>Old Name</th>
+                <th>New Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="category in pendingCategoriesEdit" :key="category.id">
+                <td>{{ category.name[0].oldName }}</td>
+                <td>{{ category.name[0].newName }}</td>
+              </tr>
+            </tbody>
+          </table>
+            </div>
+        </div>
+
+    </div>
+
+
 
 </template>
 
@@ -29,10 +60,12 @@
 import {fetchPendingCategories} from "../../../api_helpers/helpers";
 
 export default {
-  name: "PendingRequests",
   data() {
     return {
       pending_category_items: [],
+      pendingCategoriesCreate:[],
+      pendingCategoriesEdit:[],
+      pendingCategoriesDelete:[]
     };
   },
   mounted() {
@@ -40,9 +73,13 @@ export default {
   },
   methods:{
     async assign() {
-      this.pending_category_items= await fetchPendingCategories()
+      this.pending_category_items= await fetchPendingCategories();
+      this.pendingCategoriesCreate = this.pending_category_items.filter(category => category.is_approved === 0),
+          this.pendingCategoriesEdit = this.pending_category_items.filter(category => category.is_approved === -2),
+          this.pendingCategoriesDelete = this.pending_category_items.filter(category => category.is_approved === -1)
     },
-  },
+      // console.log(this.pending_category_items[0].is_approved)
+    },
 
 }
 </script>

@@ -14,9 +14,7 @@
       <div v-if="requestSent" class="alert alert-info" role="alert">
         Category creation request sent for admin approval.
       </div>
-      <router-link to="/manager-dashboard">
-        <button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Back</button>
-      </router-link>
+
     </form>
   </div>
 </template>
@@ -36,18 +34,23 @@ export default {
           console.error('Category name cannot be empty');
           return;
         }
-
+        const catname = {
+              "old_name": this.categoryName,
+              "new_name": this.categoryName,
+              "is_approved": 0
+          }
         const response = await fetch('http://127.0.0.1:5003/api/category', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ cat_name: this.categoryName, is_approved: 0 }),
+
+          body: JSON.stringify(catname),
         });
 
         const jsonResponse = await response.json();
         if (jsonResponse.message === 'something went wrong') {
-          alert('Category already exists');
+          alert('Category either already exists or given Category is not yet approved');
           this.categoryName = '';
         } else {
           if (response.ok) {
