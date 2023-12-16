@@ -69,22 +69,7 @@ export default {
     };
   },
 
-  setup() {
-    // if (!sessionStorage.getItem("token")) {
-    //   // window.location.href = "/";
-    //   console.log("Error")
-    // }
-    // // console.log(sessionStorage.getItem("token"));
-    // // console.log(JSON.parse(sessionStorage.getItem("role"))[0]);
-    // else {
-    //   if (JSON.parse(sessionStorage.getItem("role"))[0] === "admin") {
-    //     // window.location.href = "/admin-dashboard";
-    //   } else {
-    //     window.location.href = "/"
-    //     console.log("Error")
-    //   }
-    // }
-  },
+
   mounted() {
       this.assign();
   },
@@ -92,7 +77,7 @@ export default {
   methods: {
     async  logout() {
           sessionStorage.removeItem("token");
-          const response = await fetch('http://127.0.0.1:5003/logout');
+          const response = await fetch('http://127.0.0.1:5003/signout');
           if(response.ok){
             this.$router.push('/admin-login');
             alert('Logout successful');

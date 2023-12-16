@@ -81,33 +81,38 @@ export default {
         email: this.email,
         password: this.password,
       };
-      const token=JSON.parse(sessionStorage.getItem('token'));
-      const response = await fetch('http://127.0.0.1:5003/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authentication-Token': token
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.status=== 200) {
-        console.log('Login successful');
-        // console.log(response)
-        const data = await response.json();
-        // console.log(data)
-        // console.log(data.token)
-        sessionStorage.setItem("token", JSON.stringify(data.token));
-        sessionStorage.setItem("user", JSON.stringify(data.email));
-        sessionStorage.setItem("role", JSON.stringify(data.role));
-        console.log(data.role);
-        alert('Login successful');
-       this.$router.push('/admin-dashboard');
-      } else {
-        console.log('Login failed');
-        alert('Login failed');
+      const role = '';
+      const check_role = JSON.parse(sessionStorage.getItem('token'));
+      if (check_role) {
+        this.role = check_role[0];
       }
-    },
+      if (!role) {
+        const response = await fetch('http://127.0.0.1:5003/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.status === 200) {
+          console.log('Login successful');
+          // console.log(response)
+          const data = await response.json();
+          // console.log(data)
+          // console.log(data.token)
+          sessionStorage.setItem("token", JSON.stringify(data.token));
+          sessionStorage.setItem("user", JSON.stringify(data.email));
+          sessionStorage.setItem("role", JSON.stringify(data.role));
+          console.log(data.role);
+          alert('Login successful');
+          this.$router.push('/manager-dashboard');
+        } else {
+          console.log('Login failed');
+          alert('Login failed');
+        }
+      }
+    } ,
   },
 };
 </script>

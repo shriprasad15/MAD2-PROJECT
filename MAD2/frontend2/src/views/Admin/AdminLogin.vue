@@ -70,6 +70,19 @@ export default {
   props: {
     error: String,
   },
+  mounted() {
+    const token = sessionStorage.getItem('token');
+    const role='';
+      const check_role=JSON.parse(sessionStorage.getItem('token'));
+      if (check_role){
+        this.role= check_role[0];
+      }
+
+    // Redirect to the admin dashboard if the role is 'admin' and there's a token
+    if (token && role === 'admin') {
+      this.$router.push('/admin-dashboard');
+    }
+  },
   methods: {
     async submitForm() {
       const formData = {

@@ -89,24 +89,24 @@
                   <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
 
                  <div class="form-floating mb-3">
-                    <input type="email" class="form-control" name='email' id="floatingInput" placeholder="name@example.com" required>
-                    <label for="floatingInput">Email address</label>
-                  </div>
+                      <input v-model="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+                      <label for="floatingInput">Email address</label>
+                    </div>
 
                   <div class="form-floating">
-                    <input type="password" class="form-control" name='password' id="floatingPassword" placeholder="Password" required>
-                    <label for="floatingPassword">Password</label>
-                  </div>
+                      <input v-model="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+                      <label for="floatingPassword">Password</label>
+                    </div>
                   <br>
 
                   <div class="pt-1 mb-4">
-                     <button @click="handleLogin" class="btn btn-lg btn-block" type="submit" style="background-color: #6F4E37; color: white;">Login</button>
+                     <button @click="submitForm" class="btn btn-lg btn-block" type="submit" style="background-color: #6F4E37; color: white;">Login</button>
 
 
                   </div><br>
                   <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="/user-signup"
                       style="color: #393f81;">Register here</a></p>
-                <a href="/MAD2/frontend2/static"><button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Home</button></a>
+                <a href="/"><button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Home</button></a>
 <!--                </form>-->
 
               </div>
@@ -120,71 +120,58 @@
 
 </template>
 
+
 <script>
-import { ref } from "vue";
+import {ref} from "vue";
 
 export default {
-  name: "Login",
-  setup() {
-    const email = ref(''); // Initialize with an empty string
-    const password = ref(''); // Initialize with an empty string
-    const user = ref(null);
-    const err = ref('');
-    console.log(email, password);
-    const loginUser = async () => {
-      const response = await fetch("http://localhost:8080/user-login", {
-        method: "POST",
+
+  data() {
+    return {
+      email: '',
+      password: '',
+
+    };
+  },
+  props: {
+    error: String,
+  },
+  methods: {
+    async submitForm() {
+      const formData = {
+        email: this.email,
+        password: this.password,
+      };
+      const role='';
+      const check_role=JSON.parse(sessionStorage.getItem('token'));
+      if (check_role){
+        this.role= check_role[0];
+      }
+      const response = await fetch('http://127.0.0.1:5003/signin', {
+        method: 'POST',
         headers: {
-          "Content-Type": "text/plain",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: email.value, // Access the ref directly without `.value`
-          password: password.value, // Access the ref directly without `.value`
-
-        }),
-
+        body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-      // console.log(data);
-      if (response.status === 200) {
-        user.value = data.message;
-        sessionStorage.setItem("token", JSON.stringify(user.value));
-        console.log(user.value);
-        window.location.href = "/home";
+      if (response.status=== 200) {
+        console.log('Login successful');
+        // console.log(response)
+        const data = await response.json();
+        // console.log(data)
+        // console.log(data.token)
+        sessionStorage.setItem("token", JSON.stringify(data.token));
+        sessionStorage.setItem("user", JSON.stringify(data.email));
+        sessionStorage.setItem("role", JSON.stringify(data.role));
+        console.log(data.role);
+        alert('Login successful');
+       this.$router.push('/user-dashboard');
       } else {
-        console.log(data.err);
-        if (data.err) {
-          err.value = data.err;
-          setTimeout(() => {
-            err.value = '';
-          }, 3000);
-        } else {
-          err.value = "Something went wrong";
-          setTimeout(() => {
-            err.value = '';
-          }, 3000);
-        }
+        console.log('Login failed');
+        alert('Login failed');
       }
-    };
-
-    const handleLogin = () => {
-      console.log(email.value, password.value); // Access values without `.value`
-      console.log("Check");
-      loginUser();
-    };
-
-    // Rest of your functions remain unchanged
-
-    return {
-      email,
-      err,
-      password,
-      handleLogin,
-      // Other functions and values
-    };
+    },
   },
 };
 </script>
-
-

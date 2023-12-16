@@ -40,7 +40,7 @@
               <router-link to="/summary" class="nav-link" aria-current="page">Summary</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/logout" class="nav-link" aria-current="page">Logout</router-link>
+              <button @click="logout" class="nav-link" >Logout</button>
             </li>
           </ul>
         </div>
@@ -76,6 +76,20 @@ export default {
     this.assign();
   },
   methods: {
+    async  logout() {
+          sessionStorage.removeItem("token");
+          const response = await fetch('http://127.0.0.1:5003/signout');
+          if(response.ok){
+            this.$router.push('/manager-login');
+            alert('Logout successful');
+          }
+          else{
+            console.log(response)
+            alert('Logout failed');
+          }
+          // console.log(sessionStorage.getItem("token"));
+
+        },
     async assign() {
       this.category_items = await fetchCategories();
       this.product_items= await fetchProducts();

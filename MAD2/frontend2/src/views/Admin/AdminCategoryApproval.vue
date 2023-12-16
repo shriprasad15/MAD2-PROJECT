@@ -6,29 +6,29 @@
     <!-- Create Category -->
     <h3 class="mt-5">Create Category Pending Requests</h3>
 
-    <table v-if="pendingCategoriesCreate.length>0">
-      <!-- Table headers -->
-      <thead>
-        <tr>
-          <th>Category Name</th>
-          <th>Requested By</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <!-- Table body for create category pending requests -->
-      <tbody>
-        <tr v-for="(category, index) in pendingCategoriesCreate" :key="index">
-          <td>{{ category.name[0].oldName }}</td>
-          <td>{{ category.requestedBy }}</td>
-          <td>
-            <button @click="approveCreateCategory(category.id)" class="btn btn-success">Approve</button>
-            <button @click="rejectCreateCategory(category.id)" class="btn btn-danger">Reject</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <table v-if="pendingCategoriesCreate.length > 0" class="wider-table">
+  <!-- Table headers -->
+  <thead>
+    <tr>
+      <th style="width: 50%;">Category Name</th>
+      <th style="width: 20%;"></th>
+    </tr>
+  </thead>
+  <!-- Table body for create category pending requests -->
+  <tbody>
+    <tr v-for="(category, index) in pendingCategoriesCreate" :key="index">
+      <td>{{ category.name[0].oldName }}</td>
+      <td>{{ category.requestedBy }}</td>
+      <td>
+        <button @click="approveCreateCategory(category.id)" class="btn btn-success">Approve</button>
+        <button @click="rejectCreateCategory(category.id)" class="btn btn-danger">Reject</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <!--    <table v-else class="alert alert-danger mt-4 py-5 px-5" role="alert">No requests pending</table>-->
-    <div v-else class="alert alert-danger mt-4 " role="alert" style="width: 20%">No requests pending</div>
+    <div v-else class="alert alert-danger mt-4 " role="alert" style="width: 50%">No requests pending</div>
 
     <!-- Delete Category -->
     <h3 class="mt-5">Delete Category Pending Requests</h3>
@@ -37,7 +37,6 @@
       <thead>
         <tr>
           <th>Category Name</th>
-          <th>Requested By</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -53,7 +52,7 @@
         </tr>
       </tbody>
     </table>
-        <div v-else class="alert alert-danger mt-4 " role="alert" style="width: 20%">No requests pending</div>
+        <div v-else class="alert alert-danger mt-4 " role="alert" style="width: 50%">No requests pending</div>
 
     <!-- Edit Category -->
     <h3 class="mt-5">Edit Category Pending Requests</h3>
@@ -63,7 +62,6 @@
         <tr>
           <th>Old Name</th>
           <th>New Name</th>
-          <th>Requested By</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -101,10 +99,11 @@ export default {
   },
   methods: {
     async assign() {
-      this.pendingCategories = await fetchPendingCategories()
-      this.pendingCategoriesCreate = this.pendingCategories.filter(category => category.is_approved === 0),
-          this.pendingCategoriesEdit = this.pendingCategories.filter(category => category.is_approved === -2),
-          this.pendingCategoriesDelete = this.pendingCategories.filter(category => category.is_approved === -1)
+      this.pendingCategories = await fetchPendingCategories();
+      console.log("ssjcsdjcn");
+      this.pendingCategoriesCreate = this.pendingCategories.filter(category => category.is_approved === 0);
+      this.pendingCategoriesEdit = this.pendingCategories.filter(category => category.is_approved === -2);
+      this.pendingCategoriesDelete = this.pendingCategories.filter(category => category.is_approved === -1);
     },
     async approveCreateCategory(categoryId) {
       // Your approval logic for Create category
@@ -268,3 +267,18 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    /* Your CSS styles */
+    .wider-table td {
+      padding-right: 10px; /* Adjust the value as needed */
+    }
+    /* In your CSS file */
+.wider-table td {
+  margin-right: 10px; /* Adjust the value as needed */
+}
+.spaced-row {
+  margin-bottom: 200px; /* Adjust the value as needed */
+}
+
+</style>

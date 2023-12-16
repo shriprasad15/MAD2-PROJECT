@@ -39,10 +39,13 @@ export default {
               "new_name": this.categoryName,
               "is_approved": 0
           }
+        const token = JSON.parse(sessionStorage.getItem('token'));
         const response = await fetch('http://127.0.0.1:5003/api/category', {
+
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authentication-Token': token
           },
 
           body: JSON.stringify(catname),

@@ -1,16 +1,16 @@
 <template>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-  <div>
     <h3>Welcome {{ name }} to MrBean Groceries</h3>
+
     <!-- Rest of your HTML content goes here -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <button class="navbar-toggler" type="button" @click="toggleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <div class="collapse navbar-collapse" :class="{ 'show': isNavbarOpen }" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <!-- Home Link on the Left -->
         <li class="nav-item">
@@ -33,12 +33,12 @@
 
         <!-- Logout Link on the Left -->
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/logout">
+          <button @click="logout" class="nav-link" >
             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
   <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
 </svg> Logout
-          </a>
+          </button>
         </li>
       </ul>
 
@@ -66,7 +66,8 @@
       </svg>
       Cart (0)
     </a>
-    <a v-else class="nav-link" href="#">
+      <router-link to="/user-dashboard/cart" class="nav-link" aria-current="page">
+
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="50"
@@ -79,70 +80,114 @@
         <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z"/>
       </svg>
       Cart ({{ cart_value }})
-    </a>
+    </router-link>
   </li>
       </ul>
     </div>
 
   </div>
 </nav>
-
-    <div class="container mt-5">
-      <div v-if="categories.length > 0">
-        <h1 class="mb-4">Product List</h1>
-        <div v-for="category in categories" :key="category.id">
-          <h3>Category: {{ category.name[0].oldName }}</h3>
-          <div class="row">
-            <div
-              class="col-md-4"
-              v-for="product in products.filter(prod => prod?.category_id === category.id)"
-              :key="product.id"
-            >
-              <div class="card mb-4">
-                <div class="card-body">
-                  <h5 class="card-title">{{ product.name }}</h5>
-                  <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
-                  <p class="card-text">Quantity: {{ product.quantity ? product.quantity : 'Out of Stock' }}</p>
-                  <p class="card-text">Manufacture Date: {{ product.manufacture_date }}</p>
-                  <p class="card-text">Expiry Date: {{ product.expiry_date }}</p>
-                  <a v-if="product.quantity !== 0" :href="`/Add_to_cart/${userid}/${product.id}`">Add to cart (Qty 1)</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Show a message if there are no products -->
-      <div v-else>
-        <h1><p>No products available</p></h1>
-      </div>
-    </div>
-  </div>
+<RouterView/>
 </template>
 
 <script>
 import {fetchCategories} from "../../../api_helpers/helpers";
+
 export default {
-  name: 'ProductList',
+
   props: {
     name: String,
     userid: String,
-    cart_value: Number,
   },
   data() {
     return {
+      isNavbarOpen: false,
       products: [],
       categories: [],
+      cart_value: 0,
+      product_quantity: {}
     };
   },
+
   created() {
     this.fetchProducts();
+
     //this.fetchCategories();
   },
   mounted() {
+
+    this.fetch_cart_quantity();
+    this.fetch_product_quantity();
     this.assign();
   },
   methods: {
+
+    async fetch_product_quantity(prod_id){
+      const response = await fetch('http://127.0.0.1:5003/api/cart',{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+        },
+      });
+      const cart_data = await response.json();
+      if (response.ok) {
+        //filter the data to get the product id
+
+
+        this.products.forEach(product => {
+  const cartProduct = cart_data.find(item => item.product_id === product.id);
+
+  if (cartProduct) {
+    this.product_quantity[product.id] = cartProduct.quantity;
+  } else {
+    this.product_quantity[product.id] = 0;
+  }
+});
+
+        console.log(this.product_quantity)
+      }
+      else {
+        console.error('Failed to fetch cart');
+      }
+    },
+    async fetch_cart_quantity(){
+      const response = await fetch('http://127.0.0.1:5003/api/cart',{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        this.cart_value = data.length;
+        console.log(data.length)
+      }
+      else {
+        console.error('Failed to fetch cart');
+      }
+    },
+
+    async addCart(product_id) {
+      const response = await fetch(`http://127.0.0.1:5003/api/cart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+        },
+        body: JSON.stringify({
+          "product_id": product_id,
+        }),
+      });
+      if (response.ok) {
+        alert('Product added to cart');
+        this.fetch_cart_quantity();
+      }
+      else {
+        console.error('Failed to add product to cart');
+      }
+    },
       async fetchProducts() {
         try {
           const response = await fetch('http://127.0.0.1:5003/api/products');
@@ -157,6 +202,23 @@ export default {
           console.error('Error fetching products:', error);
         }
       },
+    async logout() {
+          sessionStorage.removeItem("token");
+          const response = await fetch('http://127.0.0.1:5003/signout');
+          if(response.ok){
+            this.$router.push('/user-login');
+            alert('Logout successful');
+          }
+          else{
+            console.log(response)
+            alert('Logout failed');
+          }
+          // console.log(sessionStorage.getItem("token"));
+
+        },
+    toggleNavbar() {
+      this.isNavbarOpen = !this.isNavbarOpen;
+    },
     async assign(){
       this.categories = await fetchCategories();
     }

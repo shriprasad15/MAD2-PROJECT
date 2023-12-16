@@ -13,8 +13,13 @@ export async function fetchCategories() {
     }
 export async function fetchPendingCategories() {
   try {
-    const response = await fetch('http://127.0.0.1:5003/api/pending-category');
-
+    const response = await fetch('http://127.0.0.1:5003/api/pending-category',{
+      method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+        }
+    });
     const data = await response.json();
     if (!response.ok) {
 
@@ -93,3 +98,5 @@ export async function updateProduct(productId, productData) {
     throw error;
   }
 }
+
+// export async fetchCartProducts(){}

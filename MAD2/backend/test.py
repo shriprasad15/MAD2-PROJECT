@@ -80,5 +80,5 @@ import json
 # send_message(webhook_url, message)
 
 from weasyprint import HTML
-HTML('https://google.com/').write_pdf('weasyprint-website.pdf')
+HTML('http://localhost:8080/user-dashboard/home').write_pdf('weasyprint-website.pdf')
 

@@ -23,6 +23,8 @@ import ManagerHome from "@/views/Manager/ManagerHome.vue";
 import AdminHome from "@/views/Admin/AdminHome.vue";
 import ManagerDeleteCategory from "@/views/Manager/CategoryRequests/ManagerDeleteCategory.vue";
 import ManagerEditCategory from "@/views/Manager/CategoryRequests/ManagerEditCategory.vue";
+import Cart from "@/views/User/Cart.vue";
+import UserHome from "@/views/User/UserHome.vue";
 
 const routes = [
 
@@ -31,6 +33,7 @@ const routes = [
         name: 'home',
         component: Home
     },
+
     // User Functions
     {
         path: '/user-login',
@@ -41,8 +44,20 @@ const routes = [
         path: '/user-dashboard',
         name: 'user-dashboard',
         component: UserDashboard,
+        redirect: '/user-dashboard/home',
         meta: {requiresUser: true,
             requiresAuth: true},
+        children: [
+            {
+                path: 'home',
+                component: UserHome
+            },
+            {
+                path:'Cart',
+                name:'cart',
+                component: Cart
+            },
+        ]
     },
     {
         path: '/user-signup',
@@ -171,7 +186,15 @@ router.beforeEach((to, from, next) => {
     const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
     const requiresManager = to.matched.some(record => record.meta.requiresManager);
     const requiresUser = to.matched.some(record => record.meta.requiresUser);
-    const role = JSON.parse(sessionStorage.getItem("role"))[0];
+    console.log(requiresAdmin)
+    var role=''
+    const check_role = JSON.parse(sessionStorage.getItem("role"));
+    if(check_role){
+        role= check_role[0];
+    }
+
+
+
 
     // Check if the route requires authentication
     if (requiresAdmin) {
