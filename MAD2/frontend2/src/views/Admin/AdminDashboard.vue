@@ -66,6 +66,7 @@ export default {
       logout
     }
   },
+
   data() {
     return {
       isNavbarOpen: false,
@@ -78,6 +79,20 @@ export default {
   },
 
   mounted() {
+    if (!sessionStorage.getItem("token")) {
+      window.location.href = "/";
+    }
+    // console.log(sessionStorage.getItem("token"));
+    // console.log(JSON.parse(sessionStorage.getItem("role"))[0]);
+    else
+    {
+      if (JSON.parse(sessionStorage.getItem("role"))[0] === "admin") {
+        window.location.href = "/admin-dashboard";
+      }
+      else{
+        window.location.href = "/";
+      }
+    }
     this.assign();
   },
   methods: {
@@ -86,6 +101,7 @@ export default {
       this.category_items = await fetchCategories();
       this.product_items= await fetchProducts()
     },
+
 
     openCategoryDropdown() {
       this.isProductDropdownOpen = true;

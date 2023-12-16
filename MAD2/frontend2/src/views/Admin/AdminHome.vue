@@ -74,22 +74,7 @@ export default {
       product_items: [],
     };
   },
-  beforeMount() {
-    if (!sessionStorage.getItem("token")) {
-      window.location.href = "/";
-    }
-    // console.log(sessionStorage.getItem("token"));
-    // console.log(JSON.parse(sessionStorage.getItem("role"))[0]);
-    else
-    {
-      if (JSON.parse(sessionStorage.getItem("role"))[0] === "admin") {
-        window.location.href = "/admin-dashboard";
-      }
-      else{
-        window.location.href = "/";
-      }
-    }
-  },
+
   mounted() {
 
     this.assign();
@@ -99,6 +84,7 @@ export default {
       this.category_items = await fetchCategories();
       this.product_items= await fetchProducts()
     },
+
     toggleNavbar() {
       this.isNavbarOpen = !this.isNavbarOpen;
     },

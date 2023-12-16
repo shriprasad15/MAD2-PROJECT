@@ -5,26 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4bc1d3f-df1c-4ec8-b886-1f78304378a6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CategoryRequests/ManagerDeleteCategory.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CategoryRequests/ManagerEditCategory.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/api_helpers/helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/api_helpers/helpers.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminCategoryApproval.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminCategoryApproval.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminDashboard.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminHome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminLogin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/CreateCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/CreateCategory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/DeleteCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/DeleteCategory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/EditCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/EditCategory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CreateProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CreateProduct.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/DeleteProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/DeleteProduct.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/EditProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/EditProduct.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerCreateCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CategoryRequests/ManagerCreateCategory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerHome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerPendingRequests.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerPendingRequests.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserDashboard.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +158,9 @@
       <workItem from="1702353390377" duration="21655000" />
       <workItem from="1702438725754" duration="31264000" />
       <workItem from="1702525595629" duration="12381000" />
-      <workItem from="1702561674638" duration="42042000" />
+      <workItem from="1702561674638" duration="42138000" />
+      <workItem from="1702665581660" duration="234000" />
+      <workItem from="1702693008415" duration="911000" />
     </task>
     <servers />
   </component>
