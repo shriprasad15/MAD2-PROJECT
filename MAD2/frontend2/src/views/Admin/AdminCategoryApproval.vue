@@ -1,11 +1,46 @@
 <template>
-  <div class="container mt-5">
-
-    <h2>Pending Category Requests</h2>
+<!--  <div class="container mt-5">-->
+    <div class="container mt-5">
+      <hr>
+    <center><h2>Pending Manager Approvals</h2></center>
+      <hr>
+    <!-- Create Manager Pending Requests -->
+    <div>
+      <u><h3 class="mt-5 mb-5">Create Manager Pending Requests</h3></u>
+      <div>
+        <table v-if="pendingManagers.length > 0" class="wider-table">
+          <!-- Table headers -->
+          <thead>
+            <tr>
+              <th style="width: 50%;">Manager First Name</th>
+              <th style="width: 20%;">Manager Last Name</th>
+              <th style="width: 20%;">Email</th>
+              <th style="width: 20%;"></th>
+            </tr>
+          </thead>
+          <!-- Table body for create manager pending requests -->
+          <tbody>
+            <tr v-for="(manager, index) in pendingManagers" :key="index">
+              <td>{{ manager.fname }}</td>
+              <td>{{ manager.lname }}</td>
+              <td>{{ manager.email }}</td>
+              <td>
+                <button @click="approveCreateManager(manager.id)" class="btn btn-success">Approve</button><br>
+                <button @click="rejectCreateManager(manager.id)" class="btn btn-danger">Reject</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-else class="alert alert-danger mt-4" role="alert" style="width: 50%">No requests pending</div>
+      </div>
+    </div>
+      <hr>
+    <center><h2>Pending Manager Approvals</h2></center>
+    <hr>
 
     <!-- Create Category -->
-    <h3 class="mt-5">Create Category Pending Requests</h3>
-
+    <u><h3 class="mt-5 mb-5 ">Create Category Pending Requests</h3></u>
+<div>
     <table v-if="pendingCategoriesCreate.length > 0" class="wider-table">
   <!-- Table headers -->
   <thead>
@@ -20,7 +55,7 @@
       <td>{{ category.name[0].oldName }}</td>
       <td>{{ category.requestedBy }}</td>
       <td>
-        <button @click="approveCreateCategory(category.id)" class="btn btn-success">Approve</button>
+        <button @click="approveCreateCategory(category.id)" class="btn btn-success">Approve</button><br>
         <button @click="rejectCreateCategory(category.id)" class="btn btn-danger">Reject</button>
       </td>
     </tr>
@@ -31,7 +66,7 @@
     <div v-else class="alert alert-danger mt-4 " role="alert" style="width: 50%">No requests pending</div>
 
     <!-- Delete Category -->
-    <h3 class="mt-5">Delete Category Pending Requests</h3>
+    <u><h3 class="mt-5">Delete Category Pending Requests</h3></u>
     <table v-if="pendingCategoriesDelete.length>0" class="table">
       <!-- Table headers -->
       <thead>
@@ -44,9 +79,8 @@
       <tbody>
         <tr v-for="(category, index) in pendingCategoriesDelete" :key="index">
           <td>{{ category.name[0].oldName }}</td>
-          <td>{{ category.requestedBy }}</td>
           <td>
-            <button @click="approveDeleteCategory(category.id)" class="btn btn-success">Approve</button>
+            <button @click="approveDeleteCategory(category.id)" class="btn btn-success">Approve</button><br>
             <button @click="rejectDeleteCategory(category.id)" class="btn btn-danger">Reject</button>
           </td>
         </tr>
@@ -55,7 +89,7 @@
         <div v-else class="alert alert-danger mt-4 " role="alert" style="width: 50%">No requests pending</div>
 
     <!-- Edit Category -->
-    <h3 class="mt-5">Edit Category Pending Requests</h3>
+    <u><h3 class="mt-5">Edit Category Pending Requests</h3></u>
     <table v-if="pendingCategoriesEdit.length>0" class="table">
       <!-- Table headers -->
       <thead>
@@ -70,7 +104,6 @@
         <tr v-for="(category, index) in pendingCategoriesEdit" :key="index">
           <td>{{ category.name[0].oldName }}</td>
           <td>{{ category.name[0].newName }}</td>
-          <td>{{ category.requestedBy }}</td>
           <td>
             <button @click="approveEditCategory(category.id)" class="btn btn-success">Approve</button>
             <button @click="rejectEditCategory(category.id)" class="btn btn-danger">Reject</button>
@@ -78,17 +111,19 @@
         </tr>
       </tbody>
     </table>
-        <div v-else class="alert alert-danger mt-4" role="alert" style="width: 20%">No requests pending</div>
+        <div v-else class="alert alert-danger mt-4" role="alert" style="width: 50%">No requests pending</div>
 
   </div>
+      </div>
 </template>
 
 
 <script>
-import { fetchPendingCategories} from '../../../api_helpers/helpers'
+import { fetchPendingCategories, fetchPendingManagers} from '../../../api_helpers/helpers'
 export default {
   data() {
     return {
+      pendingManagers: [], // To store pending managers fetched from the backend
       pendingCategories: [], // To store pending categories fetched from the backend
       pendingCategoriesCreate: [],
       pendingCategoriesEdit: [],
@@ -100,7 +135,7 @@ export default {
   methods: {
     async assign() {
       this.pendingCategories = await fetchPendingCategories();
-      console.log("ssjcsdjcn");
+      this.pendingManagers = await fetchPendingManagers();
       this.pendingCategoriesCreate = this.pendingCategories.filter(category => category.is_approved === 0);
       this.pendingCategoriesEdit = this.pendingCategories.filter(category => category.is_approved === -2);
       this.pendingCategoriesDelete = this.pendingCategories.filter(category => category.is_approved === -1);

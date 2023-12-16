@@ -33,7 +33,7 @@ const routes = [
         name: 'home',
         component: Home
     },
-
+    // col-sm
     // User Functions
     {
         path: '/user-login',

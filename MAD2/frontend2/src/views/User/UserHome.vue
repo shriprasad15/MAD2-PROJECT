@@ -1,11 +1,11 @@
 <template>
 
-    <div class="container mt-5">
+    <div class="container mt-4">
   <div v-if="categories.length > 0">
     <h1 class="mb-4">Product List</h1>
     <div v-for="category in categories" :key="category.id">
-      <div v-for="(product2, index) in products" :key="product2.id" class="col-md-4">
-        <div v-if="category.id===product2.category_id" >
+
+
       <h3>Category: {{ category.name[0].oldName }}</h3>
       <div class="row">
         <div v-for="(product, index) in products.filter(prod => prod?.category_id === category.id)" :key="product.id" class="col-md-4">
@@ -27,13 +27,12 @@
           </div>
         </div>
       </div>
-          </div>
+
     </div>
 
   </div>
       <!-- Show a message if there are no products -->
 
-    </div>
     </div>
 </template>
 

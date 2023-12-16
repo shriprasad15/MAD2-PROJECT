@@ -94,11 +94,10 @@ export default {
           },
           body: JSON.stringify(formData),
         });
-
+        const data = await response.json();
         if (response.status === 200) {
           console.log('Login successful');
           // console.log(response)
-          const data = await response.json();
           // console.log(data)
           // console.log(data.token)
           sessionStorage.setItem("token", JSON.stringify(data.token));
@@ -109,7 +108,7 @@ export default {
           this.$router.push('/manager-dashboard');
         } else {
           console.log('Login failed');
-          alert('Login failed');
+          alert(data.message);
         }
       }
     } ,

@@ -35,58 +35,59 @@ import { ref } from "vue";
 
 export default {
   name: "Signup",
-  setup() {
-    const firstName = ref('');
-    const lastName = ref('');
-    const mobile = ref('');
-    const email = ref('');
-    const password = ref('');
-    const user = ref(null);
-    const err = ref(null);
-    const errModal = ref(false);
-
-    const handleSignup = async () => {
-      const res = await fetch("http://localhost:5050/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: firstName.value,
-          lastName: lastName.value,
-          mobile: mobile.value,
-          email: email.value,
-          password: password.value,
-        }),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        user.value = data;
-        sessionStorage.setItem("user", JSON.stringify(user.value));
-        alert("Signup Successful");
-        // Redirect or navigate to login page
-        // window.location = "/login";
-      } else {
-        err.value = data.message;
-        errModal.value = true;
-        setTimeout(() => {
-          errModal.value = false;
-        }, 3000);
-        user.value = null;
-      }
-    };
-
+  data() {
     return {
-      handleSignup,
-      firstName,
-      lastName,
-      mobile,
-      email,
-      password,
-      err,
-      errModal,
+      firstName: "",
+      lastName: "",
+      mobile: "",
+      email: "",
+      password: "",
+      role: ["manager"],
     };
+  },
+  methods:{
+    async handleSignup(){
+      console.log(this.firstName);
+      try {
+        const response = await fetch("http://localhost:5003/create-user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            "fname": this.firstName,
+            "lname": this.lastName,
+            "email": this.email,
+            "mobile": this.mobile,
+            "password": this.password,
+            "roles": this.role,
+            "is_auth": 0
+          }),
+        });
+
+        const data = await response.json();
+        if (response.status === 200) {
+          console.log(data);
+          alert("Account created successfully");
+          this.$router.push('/manager-login');
+        } else {
+          console.log("Something went wrong");
+        }
+      } catch (err) {
+        console.log(err)
+        //set values to null in the form
+        this.firstName = "";
+        this.lastName = "";
+        this.mobile = "";
+        this.email = "";
+        this.password = "";
+
+
+        alert("Account already exists");
+
+      }
+    }
   },
 };
 </script>
+
