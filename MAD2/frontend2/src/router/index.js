@@ -40,7 +40,9 @@ const routes = [
     {
         path: '/user-dashboard',
         name: 'user-dashboard',
-        component: UserDashboard
+        component: UserDashboard,
+        meta: {requiresUser: true,
+            requiresAuth: true},
     },
     {
         path: '/user-signup',
@@ -63,6 +65,8 @@ const routes = [
         path: '/manager-dashboard',
         name: 'manager-dashboard',
         component: ManagerDashboard,
+        meta: {requiresManager: true,
+            requiresAuth: true},
         redirect: '/manager-dashboard/home',
         children: [
             {
@@ -109,6 +113,7 @@ const routes = [
 
         ]
 
+
     },
 
 
@@ -148,7 +153,9 @@ const routes = [
                 name: 'admin-approve-category',
                 component: AdminCategoryApproval
             },
-        ]
+        ],
+        meta: {requiresAdmin: true,
+            requiresAuth: true},
 
     },
 
@@ -158,5 +165,40 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
 })
+router.beforeEach((to, from, next) => {
+    const loggedIn = sessionStorage.getItem('token');
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+    const requiresManager = to.matched.some(record => record.meta.requiresManager);
+    const requiresUser = to.matched.some(record => record.meta.requiresUser);
+    const role = JSON.parse(sessionStorage.getItem("role"))[0];
+
+    // Check if the route requires authentication
+    if (requiresAdmin) {
+        // Check if the route requires admin access
+        if (loggedIn && role === "admin") {
+            next(); // Proceed to the route
+        } else {
+            next('/admin-login'); // Redirect to admin login if route requires admin access and user is not logged in or not an admin
+        }
+    } else if (requiresManager) {
+        // Check if the route requires manager access
+        if (loggedIn && role === "manager") {
+            next(); // Proceed to the route
+        } else {
+            next('/manager-login'); // Redirect to manager login if route requires manager access and user is not logged in or not a manager
+        }
+    }
+     else if(requiresUser) {
+         if (loggedIn && role === "user") {
+            next(); // Proceed to the route
+        } else {
+            next('/user-login'); // Redirect to manager login if route requires manager access and user is not logged in or not a manager
+        }
+    }
+    else{
+        next();
+    }
+});
 
 export default router

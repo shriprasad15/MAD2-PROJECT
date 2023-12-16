@@ -97,7 +97,7 @@ export default {
         sessionStorage.setItem("role", JSON.stringify(data.role));
         console.log(data.role);
         alert('Login successful');
-        window.location.href = '/admin-dashboard';
+       this.$router.push('/admin-dashboard');
       } else {
         console.log('Login failed');
         alert('Login failed');

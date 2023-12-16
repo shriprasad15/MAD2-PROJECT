@@ -56,16 +56,7 @@ export default {
     error: String,
 
   },
-  setup() {
-    const logout = () => {
-      sessionStorage.removeItem("token");
-      console.log(sessionStorage.getItem("token"));
-      window.location.href = "/admin-login";
-    }
-    return {
-      logout
-    }
-  },
+
 
   data() {
     return {
@@ -78,25 +69,41 @@ export default {
     };
   },
 
-  mounted() {
-    if (!sessionStorage.getItem("token")) {
-      window.location.href = "/";
-    }
-    // console.log(sessionStorage.getItem("token"));
-    // console.log(JSON.parse(sessionStorage.getItem("role"))[0]);
-    else
-    {
-      if (JSON.parse(sessionStorage.getItem("role"))[0] === "admin") {
-        window.location.href = "/admin-dashboard";
-      }
-      else{
-        window.location.href = "/";
-      }
-    }
-    this.assign();
+  setup() {
+    // if (!sessionStorage.getItem("token")) {
+    //   // window.location.href = "/";
+    //   console.log("Error")
+    // }
+    // // console.log(sessionStorage.getItem("token"));
+    // // console.log(JSON.parse(sessionStorage.getItem("role"))[0]);
+    // else {
+    //   if (JSON.parse(sessionStorage.getItem("role"))[0] === "admin") {
+    //     // window.location.href = "/admin-dashboard";
+    //   } else {
+    //     window.location.href = "/"
+    //     console.log("Error")
+    //   }
+    // }
   },
-  methods: {
+  mounted() {
+      this.assign();
+  },
 
+  methods: {
+    async  logout() {
+          sessionStorage.removeItem("token");
+          const response = await fetch('http://127.0.0.1:5003/logout');
+          if(response.ok){
+            this.$router.push('/admin-login');
+            alert('Logout successful');
+          }
+          else{
+            console.log(response)
+            alert('Logout failed');
+          }
+          // console.log(sessionStorage.getItem("token"));
+
+        },
     async assign() {
       this.category_items = await fetchCategories();
       this.product_items= await fetchProducts()
