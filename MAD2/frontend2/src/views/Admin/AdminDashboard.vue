@@ -69,6 +69,13 @@ export default {
     };
   },
 
+  beforeCreate() {
+    console.log("sdfc",sessionStorage.getItem("token")?.length);
+    if(!sessionStorage.getItem("token")  || (JSON.parse(sessionStorage.getItem("role"))?.[0] !== "admin") ){
+        sessionStorage.clear();
+        this.$router.push('/admin-login');
+      }
+    },
 
   mounted() {
       this.assign();
@@ -80,7 +87,7 @@ export default {
       console.log(sessionStorage.getItem("token"));
       sessionStorage.setItem("token", JSON.stringify(""));
       console.log(sessionStorage.getItem("token"));
-
+      sessionStorage.clear()
           const response = await fetch('http://127.0.0.1:5003/signout');
           if(response.ok){
             this.$router.push('/admin-login');

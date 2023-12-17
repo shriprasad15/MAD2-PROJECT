@@ -8,7 +8,7 @@
         <router-link class="btn btn-primary" to="/user-login">User Login</router-link>
         <router-link class="btn btn-primary" to="/admin-login">Admin Login</router-link>
         <router-link class="btn btn-primary" to="/manager-login">Manager Login</router-link>
-        <button @click="installApp" class="btn btn-success">Add to Desktop</button>
+<!--        <button @click="installApp" class="btn btn-success">Add to Desktop</button>-->
       </div>
     </nav>
     <div style="height: 60vh;" class="d-flex flex-column w-100 justify-content-center align-items-center">

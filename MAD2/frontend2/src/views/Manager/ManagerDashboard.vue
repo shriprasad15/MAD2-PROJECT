@@ -90,13 +90,20 @@ export default {
       errorMessage: null,
     };
   },
-  
+  beforeCreate() {
+    console.log("sdfc",sessionStorage.getItem("token")?.length);
+    if(!sessionStorage.getItem("token")  || (JSON.parse(sessionStorage.getItem("role"))?.[0] !== "manager") ){
+        sessionStorage.clear();
+        this.$router.push('/manager-login');
+      }
+    },
   mounted() {
     this.assign();
   },
   methods: {
     async  logout() {
           sessionStorage.setItem("token", JSON.stringify(""));
+          sessionStorage.clear()
           const response = await fetch('http://127.0.0.1:5003/signout');
           if(response.ok){
             this.$router.push('/manager-login');

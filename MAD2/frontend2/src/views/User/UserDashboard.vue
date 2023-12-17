@@ -43,12 +43,7 @@
       </ul>
 
       <!-- Search Form in the Middle -->
-      <form class="d-flex mx-auto" role="search" action="/user_dashboard/{{ userid}}" method="post">
-        <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">
-          <i class="bi bi-search"></i> Search
-        </button>
-      </form>
+
 
       <!-- Cart Button on the Right -->
       <ul class="navbar-nav ml-auto">
@@ -114,6 +109,13 @@ export default {
     };
   },
 
+  beforeCreate() {
+    console.log("sdfc",sessionStorage.getItem("token")?.length);
+    if(!sessionStorage.getItem("token")  || (JSON.parse(sessionStorage.getItem("role"))?.[0] !== "user") ){
+        sessionStorage.clear();
+        this.$router.push('/user-login');
+      }
+    },
   created() {
     this.fetchProducts();
 
@@ -211,6 +213,7 @@ export default {
       },
     async logout() {
           sessionStorage.setItem("token", JSON.stringify(""));
+          sessionStorage.clear()
           const response = await fetch('http://127.0.0.1:5003/signout');
           if(response.ok){
             this.$router.push('/user-login');

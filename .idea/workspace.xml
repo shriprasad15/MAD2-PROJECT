@@ -5,26 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4bc1d3f-df1c-4ec8-b886-1f78304378a6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/forge.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manifest.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/api_helpers/helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/api_helpers/helpers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminCategoryApproval.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminCategoryApproval.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Admin/AdminDashboard.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CategoryRequests/ManagerDeleteCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CategoryRequests/ManagerDeleteCategory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CategoryRequests/ManagerEditCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CategoryRequests/ManagerEditCategory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CreateProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/CreateProduct.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerDashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/Manager/ManagerLogin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/Cart.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/Profile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/Profile.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserDashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserDashboard.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserHome.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/frontend2/src/views/User/UserLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAD2/steps.md" beforeDir="false" afterPath="$PROJECT_DIR$/MAD2/steps.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +169,7 @@
       <workItem from="1702525595629" duration="12381000" />
       <workItem from="1702561674638" duration="42138000" />
       <workItem from="1702665581660" duration="234000" />
-      <workItem from="1702693008415" duration="79896000" />
+      <workItem from="1702693008415" duration="87910000" />
     </task>
     <servers />
   </component>

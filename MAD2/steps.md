@@ -11,3 +11,4 @@
 - To install vue:
   sudo npm install -g @vue/cli
 - vue create frontend
+- vue add pwa // For add to desktop feature . Note take backup of vue before running this command

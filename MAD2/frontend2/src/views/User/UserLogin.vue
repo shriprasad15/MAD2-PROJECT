@@ -104,7 +104,7 @@ export default {
           // console.log('Login successful');
           sessionStorage.setItem("token", JSON.stringify(data.token));
           if (data.role[0] === "user") {
-
+            console.log(data.role[0]);
             sessionStorage.setItem("role", JSON.stringify(data.role));
             sessionStorage.setItem("email", JSON.stringify(data.email));
             sessionStorage.setItem("mobile", JSON.stringify(data.mobile));
