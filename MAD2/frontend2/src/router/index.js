@@ -25,6 +25,7 @@ import ManagerDeleteCategory from "@/views/Manager/CategoryRequests/ManagerDelet
 import ManagerEditCategory from "@/views/Manager/CategoryRequests/ManagerEditCategory.vue";
 import Cart from "@/views/User/Cart.vue";
 import UserHome from "@/views/User/UserHome.vue";
+import Profile from "@/views/User/Profile.vue";
 
 const routes = [
 
@@ -57,6 +58,11 @@ const routes = [
                 name:'cart',
                 component: Cart
             },
+            {
+                path:'Profile',
+                name:'profile',
+                component: Profile
+            }
         ]
     },
     {
@@ -193,27 +199,33 @@ router.beforeEach((to, from, next) => {
         role= check_role[0];
     }
 
-
-
-
     // Check if the route requires authentication
     if (requiresAdmin) {
+        console.log(loggedIn)
+        console.log(role)
         // Check if the route requires admin access
         if (loggedIn && role === "admin") {
+            console.log("is admin")
             next(); // Proceed to the route
         } else {
             next('/admin-login'); // Redirect to admin login if route requires admin access and user is not logged in or not an admin
         }
     } else if (requiresManager) {
+        console.log(loggedIn, "man")
+        console.log(role, "ro")
         // Check if the route requires manager access
         if (loggedIn && role === "manager") {
+            console.log("is_manager")
             next(); // Proceed to the route
         } else {
             next('/manager-login'); // Redirect to manager login if route requires manager access and user is not logged in or not a manager
         }
     }
      else if(requiresUser) {
+         console.log(loggedIn)
+        console.log(role)
          if (loggedIn && role === "user") {
+             console.log("is_user")
             next(); // Proceed to the route
         } else {
             next('/user-login'); // Redirect to manager login if route requires manager access and user is not logged in or not a manager

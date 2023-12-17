@@ -1,4 +1,5 @@
 <template>
+
 <!--  <div class="container mt-5">-->
     <div class="container mt-5">
       <hr>
@@ -21,11 +22,11 @@
           <!-- Table body for create manager pending requests -->
           <tbody>
             <tr v-for="(manager, index) in pendingManagers" :key="index">
-              <td>{{ manager.fname }}</td>
-              <td>{{ manager.lname }}</td>
+              <td style="width: 20%;">{{ manager.fname }}</td>
+              <td style="width: 20%;">{{ manager.lname }}</td>
               <td>{{ manager.email }}</td>
               <td>
-                <button @click="approveCreateManager(manager.id)" class="btn btn-success">Approve</button><br>
+                <button @click="approveCreateManager(manager.id)" class="btn btn-success">Approve</button>
                 <button @click="rejectCreateManager(manager.id)" class="btn btn-danger">Reject</button>
               </td>
             </tr>
@@ -55,7 +56,7 @@
       <td>{{ category.name[0].oldName }}</td>
       <td>{{ category.requestedBy }}</td>
       <td>
-        <button @click="approveCreateCategory(category.id)" class="btn btn-success">Approve</button><br>
+        <button @click="approveCreateCategory(category.id)" class="btn btn-success">Approve</button>
         <button @click="rejectCreateCategory(category.id)" class="btn btn-danger">Reject</button>
       </td>
     </tr>
@@ -140,6 +141,56 @@ export default {
       this.pendingCategoriesEdit = this.pendingCategories.filter(category => category.is_approved === -2);
       this.pendingCategoriesDelete = this.pendingCategories.filter(category => category.is_approved === -1);
     },
+    async approveCreateManager(managerId){
+      try {
+        // this.managerId = this.pendingManagers.find(manager => manager.id === managerId).id;
+
+        const response = await fetch(`http://127.0.0.1:5003/api/pending-managers`,{
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+          },
+
+          body: JSON.stringify({"id": managerId}),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert(data.message);
+          window.location.reload();
+        } else {
+          console.error('Something went wrong');
+        }
+        }
+        catch (error) {
+          console.error('Error creating manager:', error);
+        }
+    },
+    async rejectCreateManager(managerId){
+      try {
+        // this.managerId = this.pendingManagers.find(manager => manager.id === managerId).id;
+
+        const response = await fetch(`http://127.0.0.1:5003/api/pending-managers`,{
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+          },
+
+          body: JSON.stringify({"id": managerId}),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert(data.message);
+          window.location.reload();
+        } else {
+          console.error('Something went wrong');
+        }
+        }
+        catch (error) {
+          console.error('Error creating manager:', error);
+        }
+    },
     async approveCreateCategory(categoryId) {
       // Your approval logic for Create category
       try {
@@ -149,6 +200,7 @@ export default {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
+            'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
           },
 
           body: JSON.stringify({"is_approved": 1}),
@@ -175,6 +227,10 @@ export default {
 
         const response = await fetch(`http://127.0.0.1:5003/api/category/${this.categoryId}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+          },
         });
         if (response.ok) {
           alert('Category rejected successfully');

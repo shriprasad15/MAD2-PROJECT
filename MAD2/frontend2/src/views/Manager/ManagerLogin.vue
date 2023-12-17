@@ -76,42 +76,58 @@ export default {
     error: String,
   },
   methods: {
-    async submitForm() {
+      async submitForm() {
       const formData = {
         email: this.email,
         password: this.password,
       };
-      const role = '';
-      const check_role = JSON.parse(sessionStorage.getItem('token'));
-      if (check_role) {
-        this.role = check_role[0];
+      console.log(formData)
+      const response = await fetch('http://127.0.0.1:5003/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (data.message==="Invalid user!") {
+        alert('Login Failed. Invalid Credentials');
+        this.email='';
+        this.password='';
+        this.$router.push('/manager-login');
       }
-      if (!role) {
-        const response = await fetch('http://127.0.0.1:5003/signin', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-        const data = await response.json();
-        if (response.status === 200) {
-          console.log('Login successful');
-          // console.log(response)
-          // console.log(data)
-          // console.log(data.token)
-          sessionStorage.setItem("token", JSON.stringify(data.token));
-          sessionStorage.setItem("user", JSON.stringify(data.email));
-          sessionStorage.setItem("role", JSON.stringify(data.role));
-          console.log(data.role);
-          alert('Login successful');
+      else{
+      if (response.status=== 200) {
+        sessionStorage.setItem("token", JSON.stringify(data.token));
+        console.log(data.token, 'data');
+        // console.log('Login successful');
+
+        if (data.role[0]==="manager") {
+          sessionStorage.setItem("email", JSON.stringify(data.email));
+          sessionStorage.setItem("mobile", JSON.stringify(data.mobile));
+          sessionStorage.setItem("fname", JSON.stringify(data.fname));
+          sessionStorage.setItem("lname", JSON.stringify(data.lname));
+
+          alert('Login successfulsdfsdc');
+
           this.$router.push('/manager-dashboard');
-        } else {
-          console.log('Login failed');
-          alert(data.message);
         }
+
+        else {
+          const logout_response = await fetch('http://127.0.0.1:5003/signout');
+          if (logout_response.ok) {
+            sessionStorage.setItem("token", JSON.stringify(""));
+            alert('Login Failed');
+            this.email='';
+            this.password='';
+            this.$router.push('/manager-login');
+          }
+        }
+
       }
-    } ,
+    }
+    },
   },
 };
 </script>

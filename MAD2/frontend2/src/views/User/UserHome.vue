@@ -1,6 +1,6 @@
 <template>
 
-    <div class="container mt-4">
+    <div class="container mt-5">
   <div v-if="categories.length > 0">
     <h1 class="mb-4">Product List</h1>
     <div v-for="category in categories" :key="category.id">
@@ -8,25 +8,28 @@
 
       <h3>Category: {{ category.name[0].oldName }}</h3>
       <div class="row">
-        <div v-for="(product, index) in products.filter(prod => prod?.category_id === category.id)" :key="product.id" class="col-md-4">
-          <div class="card mb-5">
-            <div class="card-body">
-              <div v-if="product_quantity[product.id] !== 0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16" style="position: absolute; top: 5px; right: 50px;" >
-                  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z"/>
-                </svg>
-              <p></p>
-              </div>
-              <h3 class="card-title">{{ product.name }}</h3>
-              <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
-              <p class="card-text">Quantity: {{ product.quantity ? product.quantity : 'Out of Stock' }}</p>
-              <p class="card-text">Manufacture Date: {{ product.manufacture_date }}</p>
-              <p class="card-text">Expiry Date: {{ product.expiry_date }}</p>
-              <button v-if="product.quantity !== 0" @click="addCart(product.id)">Add to cart</button> (In cart:  {{ product_quantity[product.id] }})
-            </div>
-          </div>
+  <div v-for="(product, index) in products.filter(prod => prod?.category_id === category.id)" :key="product.id" class="col-md-4">
+    <div class="card mb-5">
+      <div class="card-body">
+        <div v-if="product_quantity[product.id] > 0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16" style="position: absolute; top: 5px; right: 50px;">
+            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z"/>
+          </svg>
+          <p>(Item Cart: {{ product_quantity[product.id] }})</p>
         </div>
+<!--        <p>(Item Cart: {{ product_quantity[product.id] }})</p>-->
+<!--        {{product_quantity}}-->
+        <h3 class="card-title">{{ product.name }}</h3>
+        <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
+        <p class="card-text">Quantity: {{ product.quantity ? product.quantity : 'Out of Stock' }}</p>
+        <p class="card-text">Manufacture Date: {{ product.manufacture_date }}</p>
+        <p class="card-text">Expiry Date: {{ product.expiry_date }}</p>
+        <button v-if="product.quantity !== 0" @click="addCart(product.id)">Add to cart</button>
       </div>
+    </div>
+  </div>
+</div>
+
 
     </div>
 
@@ -68,7 +71,7 @@ export default {
   },
   methods: {
 
-    async fetch_product_quantity(prod_id){
+    async fetch_product_quantity(){
       const response = await fetch('http://127.0.0.1:5003/api/cart',{
         method: 'GET',
         headers: {

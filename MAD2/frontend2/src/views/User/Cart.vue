@@ -20,7 +20,7 @@
 
             <!-- Quantity Edit Form -->
               <div class="mb-3">
-        <label for="quantity" class="form-label">Selected Quantity: {{ product.cart_quantity }}</label>
+       <b> <label for="quantity" class="form-label">Selected Quantity: {{ product.cart_quantity }}</label></b>
         <div class="input-group">
           <input type="number" class="form-control" id="quantity" v-model="product.updateQty" min="1" :max="product.cart_quantity">
           <button class="btn btn-primary" @click="updateQuantity(product.product_id, product.updateQty)">Update Quantity</button>
@@ -50,7 +50,7 @@
     <!-- Total Cart Price and Buy All Button -->
     <div class="mt-4 text-center">
       <h4>Total Cart Price: ₹{{ total_price }}</h4>
-      <a :href="`/buy/${userid}`"><button type="button" class="btn btn-success">Buy All</button></a>
+      <button @click="buyAll()">Buy All</button>
     </div>
   </div>
 </template>
@@ -137,6 +137,25 @@ export default {
           console.error('Failed to delete product');
         }
       },
+    async buyAll() {
+      try {
+        const response = await fetch(`http://127.0.0.1:5003/api/buy`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication-Token': JSON.parse(sessionStorage.getItem('token'))
+          },
+        });
+        if (response.ok) {
+          alert('Product bought successfully');
+          this.$router.push('/user-dashboard');
+        } else {
+          console.error('Failed to buy product');
+        }
+    }catch (error) {
+        alert('Item quantity exceeded');
+    }
+    },
     },
     computed: {
       // Function to calculate total price of all products in cart

@@ -101,7 +101,14 @@ export async function updateProduct(productId, productData) {
 
 export async function fetchPendingManagers() {
       try {
-        const response = await fetch('http://127.0.0.1:5003/api/pending-managers');
+        const response = await fetch('http://127.0.0.1:5003/api/pending-managers',{
+            method: 'GET',
+                headers: {
+                'Content-Type': 'application/json',
+                'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+                }
+            });
+
 
         const data = await response.json();
         if (!response.ok) {
@@ -111,4 +118,50 @@ export async function fetchPendingManagers() {
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
+    }
+
+    export async function addDesktop(){
+      try {
+        const response = await fetch("http://127.0.0.1:5003/add-to-desktop", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            "name": "GroceryApp",
+            "url": "http://localhost:8080/",
+            "icon": "https://cdn.iconscout.com/icon/free/png-256/grocery-185-461761.png"
+          }),
+        });
+        if (response.ok) {
+          alert("Grocery App Added to Desktop")
+          // Handle success: show a message, update UI, etc.
+        } else {
+          console.error("Failed to create shortcut");
+          // Handle failure: show an error message, retry logic, etc.
+        }
+      } catch (err) {
+        console.error(err);
+        // Handle exceptions here
+      }
+
+    }
+
+    export async function fetchProfileDetails() {
+      try {
+        const response = await fetch('http://127.0.0.1:5003/api/buy',{
+            method: 'GET',
+                headers: {
+                'Content-Type': 'application/json',
+                'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
+                }
+            });
+        if (!response.ok) {
+          throw response;
+        }
+        return response
+        }
+        catch (error) {
+        console.error('Error fetching categories:', error);
+        }
     }

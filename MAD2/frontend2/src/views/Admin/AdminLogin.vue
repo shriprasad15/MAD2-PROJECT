@@ -1,6 +1,5 @@
 <template>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-  <form @submit.prevent="submitForm">
     <section class="vh-100" style="background-color: #273447;">
       <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -40,7 +39,7 @@
                     <br>
 
                     <div class="pt-1 mb-4">
-                      <button class="btn btn-lg btn-block" type="submit" style="background-color: #6F4E37; color: white;">Login</button>
+                      <button @click="submitForm" class="btn btn-lg btn-block" type="submit" style="background-color: #6F4E37; color: white;">Login</button>
                     </div>
                     <a href="/"><button type="button" class="btn btn-primary" style="background-color: #6F4E37; color: white;">Home</button></a>
 
@@ -52,7 +51,6 @@
         </div>
       </div>
     </section>
-  </form>
 </template>
 
 <script>
@@ -89,32 +87,50 @@ export default {
         email: this.email,
         password: this.password,
       };
-      const token=JSON.parse(sessionStorage.getItem('token'));
+      console.log(formData)
       const response = await fetch('http://127.0.0.1:5003/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authentication-Token': token
+          // 'Authentication-Token':JSON.parse(sessionStorage.getItem('token'))
         },
         body: JSON.stringify(formData),
       });
-
-      if (response.status=== 200) {
-        console.log('Login successful');
-        // console.log(response)
-        const data = await response.json();
-        // console.log(data)
-        // console.log(data.token)
-        sessionStorage.setItem("token", JSON.stringify(data.token));
-        sessionStorage.setItem("user", JSON.stringify(data.email));
-        sessionStorage.setItem("role", JSON.stringify(data.role));
-        console.log(data.role);
-        alert('Login successful');
-       this.$router.push('/admin-dashboard');
-      } else {
-        console.log('Login failed');
-        alert('Login failed');
+      const data = await response.json();
+      if (data.message==="Invalid user!") {
+        alert('Login Failed. Invalid Credentials');
+        this.email='';
+        this.password='';
+        this.$router.push('/admin-login');
       }
+      else{
+      if (response.status=== 200) {
+        sessionStorage.setItem("token", JSON.stringify(data.token));
+        // console.log('Login successful');
+
+        if (data.role[0]==="admin") {
+
+          sessionStorage.setItem("email", JSON.stringify(data.email));
+          sessionStorage.setItem("mobile", JSON.stringify(data.mobile));
+          sessionStorage.setItem("fname", JSON.stringify(data.fname));
+          sessionStorage.setItem("lname", JSON.stringify(data.lname));
+
+          alert('Login successful');
+          this.$router.push('/admin-dashboard');
+        }
+
+        else {
+          const logout_response = await fetch('http://127.0.0.1:5003/signout');
+          if (logout_response.ok) {
+            alert('Login Failed. Access Restricted');
+            this.email='';
+            this.password='';
+            this.$router.push('/admin-login');
+          }
+        }
+
+      }
+    }
     },
   },
 };

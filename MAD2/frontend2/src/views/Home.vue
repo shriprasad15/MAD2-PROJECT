@@ -1,22 +1,24 @@
 <template>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <nav class="navbar navbar-dark navbar-expand-lg bg-dark border-bottom  border-primary ">
-        <div class="container-fluid">
-            <div style="cursor: pointer;" class="navbar-brand">Grocery App</div><br>
-          <router-link class="btn btn-primary" to="/user-login">User Login </router-link>
-          <router-link class="btn btn-primary" to="/admin-login">Admin Login </router-link>
-          <router-link class="btn btn-primary" to="/manager-login">Manager Login </router-link>
 
-
-        </div>
+  <div>
+    <nav class="navbar navbar-dark navbar-expand-lg bg-dark border-bottom border-primary">
+      <div class="container-fluid">
+        <div style="cursor: pointer;" class="navbar-brand">Grocery App</div><br>
+        <router-link class="btn btn-primary" to="/user-login">User Login</router-link>
+        <router-link class="btn btn-primary" to="/admin-login">Admin Login</router-link>
+        <router-link class="btn btn-primary" to="/manager-login">Manager Login</router-link>
+        <button @click="addDesktop()" class="btn btn-success">Add to Desktop</button>
+      </div>
     </nav>
-    <div style="height: 60vh;" class="d-flex flex-column w-100 justify-content-center align-items-center ">
-        <h1>Welcome to Grocery App</h1>
+    <div style="height: 60vh;" class="d-flex flex-column w-100 justify-content-center align-items-center">
+      <h1>Welcome to Grocery App</h1>
     </div>
-
+  </div>
 </template>
-<!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossOrigin="anonymous"></script>-->
 
 <script setup>
+import { ref } from 'vue';
+import {addDesktop} from "../../api_helpers/helpers";
 
 </script>

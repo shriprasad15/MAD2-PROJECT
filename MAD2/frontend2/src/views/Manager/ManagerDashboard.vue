@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     async  logout() {
-          sessionStorage.removeItem("token");
+          sessionStorage.setItem("token", JSON.stringify(""));
           const response = await fetch('http://127.0.0.1:5003/signout');
           if(response.ok){
             this.$router.push('/manager-login');
