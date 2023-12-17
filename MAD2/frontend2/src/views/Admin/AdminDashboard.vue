@@ -29,10 +29,7 @@
             <li class="nav-item">
               <router-link to="/admin-dashboard/Approve-Requests" class="nav-link" aria-current="page">Manager Control</router-link>
             </li>
-
-            <li class="nav-item">
-              <router-link to="#" class="nav-link" aria-current="page">Summary</router-link>
-            </li>
+            
             <li class="nav-item">
 
           <button @click="logout" class="nav-link" >Logout</button>

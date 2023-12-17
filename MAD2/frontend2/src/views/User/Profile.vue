@@ -32,7 +32,7 @@
         <div v-for="product in profile_items" :key="product.id" class="col-md-4">
           <div class="card mb-4">
             <div class="card-body">
-              <h5 class="card-title">{{ product.name }}</h5>
+              <h5 class="card-title">{{ product.product_name }}</h5>
               <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
               <p class="card-text">Quantity: {{ product.quantity }}</p>
               <p class="card-text">Purchase Date & Time: {{ product.date_purchased }}</p>

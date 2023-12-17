@@ -21,7 +21,7 @@
           </svg>
           <p>(Item Cart: {{ product_quantity }})</p>
         </div>
-        <p>(Item Cart: {{ product_quantity[product.id] }})</p>
+<!--        <p>(Item Cart: {{ product_quantity[product.id] }})</p>-->
 <!--        {{product_quantity}}-->
         <h3 class="card-title">{{ product.name }}</h3>
         <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
@@ -104,9 +104,9 @@ export default {
           this.products.forEach(product => {
             const cartProduct = cartData.find(item => item.product_id === product.id);
             if (cartProduct) {
-              this.$set(this.product_quantity, product.id, cartProduct.quantity);
+              this.set(this.product_quantity, product.id, cartProduct.quantity);
             } else {
-              this.$set(this.product_quantity, product.id, 0);
+              this.set(this.product_quantity, product.id, 0);
             }
           });
         } else {
@@ -141,31 +141,7 @@ export default {
       );
     },
 
-    getCategoryNameById(categoryId) {
-      const category = this.categories.find(category => category.id === categoryId);
-      return category ? category.name[0].oldName : '';
-    },
-   //implement searchProducts from the products list and category list without api
-    async searchProducts() {
-      try {
-        const response = await fetch(`http://127.0.0.1:5003/api/product/search/${this.searchQuery}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authentication-Token': JSON.parse(sessionStorage.getItem('token'))
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          this.products = data;
-        } else {
-          console.error('Failed to fetch products');
-        }
-      }
-      catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    },
+
 
 
     async addCart(product_id) {
@@ -209,22 +185,6 @@ export default {
         }
       },
 
-    async fetchCategoryProducts(category_id) {
-      try {
-        const response = await fetch(`http://127.0.0.1:5003/api/product/cat/${category_id}`);
-
-        const data = await response.json();
-        if (response.ok) {
-          this.category_with_products = data;
-
-        } else {
-          console.error('Failed to fetch products');
-        }
-      }
-      catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    },
     async logout() {
           sessionStorage.removeItem("token");
           const response = await fetch('http://127.0.0.1:5003/signout');

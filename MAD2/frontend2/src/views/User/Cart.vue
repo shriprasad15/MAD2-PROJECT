@@ -130,8 +130,15 @@ export default {
           },
         });
         if (response.ok) {
+
           alert('Product deleted successfully');
-          window.location.reload();
+          if(this.product_items.length === 0){
+            this.$router.push('/user-dashboard');
+          }
+          else{
+            window.location.reload();
+          }
+          // window.location.reload();
         }
         else {
           console.error('Failed to delete product');
