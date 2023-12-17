@@ -42,7 +42,7 @@
     <!-- Create Category -->
     <u><h3 class="mt-5 mb-5 ">Create Category Pending Requests</h3></u>
 <div>
-    <table v-if="pendingCategoriesCreate.length > 0" class="wider-table">
+    <table v-if="pendingCategoriesCreate.length > 0" class="table-responsive">
   <!-- Table headers -->
   <thead>
     <tr>
@@ -256,6 +256,8 @@ export default {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            'Authentication-Token': JSON.parse(sessionStorage.getItem('token'))
+
           },
 
           body: JSON.stringify(name),
@@ -287,6 +289,8 @@ export default {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            'Authentication-Token': JSON.parse(sessionStorage.getItem('token'))
+
           },
 
           body: JSON.stringify(name),
@@ -313,6 +317,11 @@ export default {
         console.log(this.categoryId);
         const response = await fetch(`http://127.0.0.1:5003/api/category/${this.categoryId}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication-Token': JSON.parse(sessionStorage.getItem('token'))
+
+          },
         });
         if (response.ok) {
           alert('Category deleted successfully');
@@ -333,6 +342,8 @@ export default {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
+            'Authentication-Token': JSON.parse(sessionStorage.getItem('token'))
+
           },
 
           body: JSON.stringify({"is_approved": 1}),

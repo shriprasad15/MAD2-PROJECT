@@ -104,6 +104,8 @@ export default {
           // console.log('Login successful');
           sessionStorage.setItem("token", JSON.stringify(data.token));
           if (data.role[0] === "user") {
+
+            sessionStorage.setItem("role", JSON.stringify(data.role));
             sessionStorage.setItem("email", JSON.stringify(data.email));
             sessionStorage.setItem("mobile", JSON.stringify(data.mobile));
             sessionStorage.setItem("fname", JSON.stringify(data.fname));
@@ -111,6 +113,7 @@ export default {
 
             alert('Login successful');
             this.$router.push('/user-dashboard');
+            console.error("Eeror")
           } else {
             const logout_response = await fetch('http://127.0.0.1:5003/signout');
             if (logout_response.ok) {

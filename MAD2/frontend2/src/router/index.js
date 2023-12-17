@@ -46,8 +46,7 @@ const routes = [
         name: 'user-dashboard',
         component: UserDashboard,
         redirect: '/user-dashboard/home',
-        meta: {requiresUser: true,
-            requiresAuth: true},
+        meta: {requiresUser: true},
         children: [
             {
                 path: 'home',
@@ -86,8 +85,7 @@ const routes = [
         path: '/manager-dashboard',
         name: 'manager-dashboard',
         component: ManagerDashboard,
-        meta: {requiresManager: true,
-            requiresAuth: true},
+        meta: {requiresManager: true},
         redirect: '/manager-dashboard/home',
         children: [
             {
@@ -175,8 +173,7 @@ const routes = [
                 component: AdminCategoryApproval
             },
         ],
-        meta: {requiresAdmin: true,
-            requiresAuth: true},
+        meta: {requiresAdmin: true},
 
     },
 
@@ -187,29 +184,39 @@ const router = createRouter({
     routes
 })
 router.beforeEach((to, from, next) => {
-    const loggedIn = sessionStorage.getItem('token');
+    const loggedIn = JSON.parse(sessionStorage.getItem('token'))
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
     const requiresManager = to.matched.some(record => record.meta.requiresManager);
     const requiresUser = to.matched.some(record => record.meta.requiresUser);
-    console.log(requiresAdmin)
     var role=''
     const check_role = JSON.parse(sessionStorage.getItem("role"));
-    if(check_role){
-        role= check_role[0];
+    console.log(`Require Admin ${requiresAdmin}`)
+    console.log(`Logged in ${loggedIn}`)
+    console.log(role)
+    if(check_role) {
+        role = check_role[0];
+        next()
     }
 
-    // Check if the route requires authentication
-    if (requiresAdmin) {
-        console.log(loggedIn)
-        console.log(role)
-        // Check if the route requires admin access
-        if (loggedIn && role === "admin") {
-            console.log("is admin")
-            next(); // Proceed to the route
-        } else {
-            next('/admin-login'); // Redirect to admin login if route requires admin access and user is not logged in or not an admin
-        }
+        // Check if the route requires authentication
+        if (requiresAdmin === true) {
+
+            next()
+            console.log(role)
+            // Check if the route requires admin access
+
+
+            if (loggedIn && role === "admin") {
+                console.log("is admin")
+                next(); // Proceed to the route
+            } else {
+                console.log(`Role : ${role}, Logged in : ${loggedIn}`)
+                next('/admin-login'); // Redirect to admin login if route requires admin access and user is not logged in or not an admin
+            }
+
+
+
     } else if (requiresManager) {
         console.log(loggedIn, "man")
         console.log(role, "ro")

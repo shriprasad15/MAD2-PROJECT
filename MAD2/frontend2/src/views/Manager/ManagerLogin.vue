@@ -91,6 +91,7 @@ export default {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
+      console.log(data.message)
       if (data.message==="Invalid user!") {
         alert('Login Failed. Invalid Credentials');
         this.email='';
@@ -104,12 +105,13 @@ export default {
         // console.log('Login successful');
 
         if (data.role[0]==="manager") {
+          sessionStorage.setItem("role", JSON.stringify(data.role));
           sessionStorage.setItem("email", JSON.stringify(data.email));
           sessionStorage.setItem("mobile", JSON.stringify(data.mobile));
           sessionStorage.setItem("fname", JSON.stringify(data.fname));
           sessionStorage.setItem("lname", JSON.stringify(data.lname));
 
-          alert('Login successfulsdfsdc');
+          alert('Login successful');
 
           this.$router.push('/manager-dashboard');
         }
@@ -125,6 +127,12 @@ export default {
           }
         }
 
+      }
+      else{
+        alert('User not yet authenticated');
+        this.email='';
+        this.password='';
+        this.$router.push('/manager-login');
       }
     }
     },

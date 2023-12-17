@@ -87,6 +87,8 @@ export default {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authentication-Token': JSON.parse(sessionStorage.getItem('token'))
+
           },
           body: JSON.stringify({
             prod_name: this.productName,

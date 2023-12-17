@@ -97,6 +97,7 @@ export default {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
+      console.log(data)
       if (data.message==="Invalid user!") {
         alert('Login Failed. Invalid Credentials');
         this.email='';
@@ -109,7 +110,8 @@ export default {
         // console.log('Login successful');
 
         if (data.role[0]==="admin") {
-
+          console.log("data ; " + data.role)
+          sessionStorage.setItem("role", JSON.stringify(data.role));
           sessionStorage.setItem("email", JSON.stringify(data.email));
           sessionStorage.setItem("mobile", JSON.stringify(data.mobile));
           sessionStorage.setItem("fname", JSON.stringify(data.fname));

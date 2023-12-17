@@ -73,6 +73,8 @@ export default {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            'Authentication-Token': JSON.parse(sessionStorage.getItem('token'))
+
           },
           body: JSON.stringify(catname),
         });

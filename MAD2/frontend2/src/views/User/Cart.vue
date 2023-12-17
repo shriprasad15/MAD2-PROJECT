@@ -148,6 +148,7 @@ export default {
         });
         if (response.ok) {
           alert('Product bought successfully');
+          window.location.reload()
           this.$router.push('/user-dashboard');
         } else {
           console.error('Failed to buy product');

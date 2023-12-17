@@ -29,13 +29,13 @@
 
       <h2>Ordered Items</h2>
       <div v-if="profile_items.length > 0" class="row">
-        <div v-for="(product, profile) in profile_items" :key="product.id" class="col-md-4">
+        <div v-for="product in profile_items" :key="product.id" class="col-md-4">
           <div class="card mb-4">
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
               <p class="card-text">Rate Per Unit: ₹{{ product.rate_per_unit }}</p>
-              <p class="card-text">Quantity: {{ profile.quantity }}</p>
-              <p class="card-text">Purchase Date & Time: {{ profile.date_purchased }}</p>
+              <p class="card-text">Quantity: {{ product.quantity }}</p>
+              <p class="card-text">Purchase Date & Time: {{ product.date_purchased }}</p>
             </div>
           </div>
         </div>
@@ -63,9 +63,13 @@ export default {
       profile_items: [] // Initialize as an empty array
     };
   },
-  created() {
+  async mounted() {
     // Fetch profile details on component creation
-    this.profile_items = fetchProfileDetails();
+    console.log("error")
+    await fetchProfileDetails().then((data) => {
+      this.profile_items = data;
+    })
+    console.log("Profile: ",this.profile_items)
   }
 };
 </script>

@@ -1,6 +1,5 @@
 <template>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
 
     <h1>Manager dashboard</h1>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -37,11 +36,29 @@
               <router-link to="/manager-dashboard/Manager-PendingRequests" class="nav-link" aria-current="page">Pending Requests</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/summary" class="nav-link" aria-current="page">Summary</router-link>
+              <a class="nav-link" role="button" @click="exportCSV">Generate Report</a>
             </li>
             <li class="nav-item">
               <button @click="logout" class="nav-link" >Logout</button>
             </li>
+            <div v-if="confirmationModal" class="modal fade show" style="display: block;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmation</h5>
+            <button type="button" class="btn-close" @click="confirmationModal = false"></button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to export the CSV?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="confirmationModal = false">Cancel</button>
+            <button type="button" class="btn btn-success" @click="confirmExport">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
           </ul>
         </div>
       </div>
@@ -69,6 +86,8 @@ export default {
       categoryItems: ['Create-Category', 'Delete-Category', 'Edit-Category'],
       category_items: [],
       product_items: [],
+      confirmationModal: false,
+      errorMessage: null,
     };
   },
   
@@ -90,6 +109,29 @@ export default {
           // console.log(sessionStorage.getItem("token"));
 
         },
+     exportCSV() {
+      this.confirmationModal = true;
+    },
+    async confirmExport() {
+      // Call your API endpoint to export CSV here
+      // Example using axios:
+     this.isWaiting = true
+      const res = await fetch('http://127.0.0.1:5003/gen_csv')
+      const data = await res.json()
+      if (res.ok) {
+        this.confirmationModal = false; // Close confirmation modal
+        alert('CSV will be exported shortly. Please check your mail in a few minutes.');
+        const taskId = data['task-id']
+        const intv = setInterval(async () => {
+          const csv_res = await fetch(`http://127.0.0.1:5003/get_csv/${taskId}`)
+          if (csv_res.ok) {
+            this.isWaiting = false
+            clearInterval(intv)
+            // window.location.href = `http://127.0.0.1:5003/get_csv/${taskId}`
+          }
+        }, 1000)
+      }
+    },
     async assign() {
       this.category_items = await fetchCategories();
       this.product_items= await fetchProducts();

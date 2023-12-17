@@ -54,6 +54,7 @@ export default {
       isNavbarOpen: false,
       products: [],
       categories: [],
+      category_with_products: [],
       cart_value: 0,
       product_quantity: {}
     };
@@ -133,6 +134,7 @@ export default {
         if (response.ok) {
           alert('Product added to cart');
           await this.fetch_cart_quantity();
+          window.location.reload()
         }
         else {
           console.error('Failed to add product to cart');
@@ -157,6 +159,23 @@ export default {
           console.error('Error fetching products:', error);
         }
       },
+
+    async fetchCategoryProducts(category_id) {
+      try {
+        const response = await fetch(`http://127.0.0.1:5003/api/product/cat/${category_id}`);
+
+        const data = await response.json();
+        if (response.ok) {
+          this.category_with_products = data;
+
+        } else {
+          console.error('Failed to fetch products');
+        }
+      }
+      catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    },
     async logout() {
           sessionStorage.removeItem("token");
           const response = await fetch('http://127.0.0.1:5003/signout');
